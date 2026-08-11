@@ -40,7 +40,7 @@ export default async function Home() {
     <MainLayout navbarData={navbar} footerData={footer}>
       <JsonLd
         data={getWebPageSchema({
-          title: 'Engineering, Prototyping & Embedded Systems',
+          title: 'Phenix Labs - Engineering, Prototyping & Embedded Systems',
           description:
             'Engineering services and research-led product development for industry and academic partners.',
           path: '/',

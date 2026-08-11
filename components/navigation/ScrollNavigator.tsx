@@ -235,7 +235,7 @@ export function ScrollNavigator() {
               aria-hidden={!isMenuOpen}
               onMouseEnter={cancelScheduledClose}
               onMouseLeave={scheduleMenuClose}
-              className={`absolute bottom-[calc(100%+10px)] right-0 w-[min(310px,calc(100vw-2rem))] origin-bottom-right overflow-hidden rounded-[18px] border border-[#c6d4df] bg-[#f8fbfd]/97 p-2 shadow-[0_24px_70px_rgba(13,31,50,0.22)] backdrop-blur-xl transition duration-200 ${
+              className={`absolute bottom-[calc(100%+10px)] right-0 w-[min(326px,calc(100vw-2rem))] origin-bottom-right overflow-hidden rounded-[18px] border border-[#c6d4df] bg-[#f8fbfd]/97 p-3 shadow-[0_24px_70px_rgba(13,31,50,0.22)] backdrop-blur-xl transition duration-200 ${
                 isMenuOpen
                   ? 'pointer-events-auto translate-y-0 opacity-100'
                   : 'pointer-events-none translate-y-2 opacity-0'
@@ -257,7 +257,7 @@ export function ScrollNavigator() {
               <nav
                 ref={sectionListRef}
                 aria-label="Page sections"
-                className="max-h-[min(55vh,390px)] overflow-y-auto"
+                className="max-h-[min(55vh,390px)] overflow-x-hidden overflow-y-auto [scrollbar-gutter:stable]"
               >
                 <ul className="space-y-1">
                   {sections.map((section, index) => {
@@ -269,7 +269,7 @@ export function ScrollNavigator() {
                           type="button"
                           data-section-target={section.id}
                           onClick={() => scrollToSection(section.id)}
-                          className={`flex w-full cursor-pointer items-center gap-3 rounded-[12px] border px-3 py-2.5 text-left text-sm transition-all duration-200 hover:translate-x-0.5 ${
+                          className={`flex w-full cursor-pointer items-center gap-3 rounded-[12px] border px-3 py-2.5 text-left text-sm transition-[border-color,background-color,color,box-shadow] duration-200 ${
                             isActive
                               ? 'border-[#bddaf3] bg-[#e4f1ff] font-semibold text-[#075fae]'
                               : 'border-transparent text-[#465a6d] hover:border-[#cfdee9] hover:bg-[#eaf2f7] hover:text-[#0d5fa8] hover:shadow-[0_5px_15px_rgba(25,63,94,0.07)]'

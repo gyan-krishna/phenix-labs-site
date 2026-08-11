@@ -47,7 +47,8 @@ export function generateMetadata(params: SEOMetadata = {}): Metadata {
     index = true,
   } = params
 
-  const fullTitle = title === siteConfig.name ? title : `${title} | ${siteConfig.name}`
+  const fullTitle =
+    title === siteConfig.name ? title : `${siteConfig.name} - ${title}`;
   const pageUrl = absoluteUrl(path)
   const canonical = canonicalUrl || pageUrl
   const socialImage = absoluteUrl(ogImage)
