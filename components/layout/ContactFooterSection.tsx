@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import {
   AlarmClock,
   ArrowUpRight,
@@ -8,15 +7,17 @@ import {
 } from 'lucide-react'
 import { SocialBrandIcon } from '@/components/common/SocialBrandIcon'
 import type { ContactSettings } from '@/types'
+import { sharedContent } from '@/content/shared'
+import { ScrollResetLink } from '@/components/navigation/ScrollResetLink'
 
 /** Footer contact summary populated by the singleton Contact & Social document. */
 export function ContactFooterSection({ contact }: { contact: ContactSettings }) {
   // Omit unset CMS values so the footer never renders empty contact rows.
   const contactDetails = [
-    { icon: Phone, label: 'Call us', value: contact.phone, href: contact.phoneHref },
-    { icon: Mail, label: 'Email us', value: contact.email, href: contact.emailHref },
-    { icon: AlarmClock, label: 'Working hours', value: contact.hours },
-    { icon: MapPin, label: 'Visit us', value: contact.address },
+    { icon: Phone, label: sharedContent.footer.contactLabels.phone, value: contact.phone, href: contact.phoneHref },
+    { icon: Mail, label: sharedContent.footer.contactLabels.email, value: contact.email, href: contact.emailHref },
+    { icon: AlarmClock, label: sharedContent.footer.contactLabels.hours, value: contact.hours },
+    { icon: MapPin, label: sharedContent.footer.contactLabels.address, value: contact.address },
   ].filter((item) => item.value)
 
   return (
@@ -44,32 +45,31 @@ export function ContactFooterSection({ contact }: { contact: ContactSettings }) 
           <div>
             <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.1] bg-white/[0.04] px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#77b8ff]">
               <span className="size-2 rounded-full bg-[#4ddb9d] shadow-[0_0_0_5px_rgba(77,219,157,0.1)]" />
-              Available for new projects
+              {sharedContent.footer.availability}
             </span>
             <h2
               id="footer-contact-title"
               className="mt-7 max-w-[720px] text-[40px] font-bold leading-[1.02] tracking-[-0.045em] md:text-[60px]"
             >
-              Let&apos;s make the next idea real.
+              {sharedContent.footer.title}
             </h2>
           </div>
 
           <div className="lg:pb-1">
             <p className="max-w-[520px] text-[16px] leading-8 text-[#9aa8b9]">
-              Tell us what you are exploring, improving, or bringing to life.
-              We will respond with practical next steps.
+              {sharedContent.footer.description}
             </p>
-            <Link
+            <ScrollResetLink
               href="/contact"
               className="group mt-7 inline-flex h-14 items-center gap-3 rounded-full bg-[#0c70df] px-7 font-semibold text-white shadow-[0_15px_38px_rgba(0,100,215,0.3)] transition-all hover:-translate-y-0.5 hover:bg-[#1680ef] hover:shadow-[0_18px_44px_rgba(0,100,215,0.38)]"
             >
-              Start a conversation
+              {sharedContent.footer.action}
               <ArrowUpRight
                 aria-hidden="true"
                 size={18}
                 className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
               />
-            </Link>
+            </ScrollResetLink>
           </div>
         </div>
 
@@ -114,7 +114,7 @@ export function ContactFooterSection({ contact }: { contact: ContactSettings }) 
             {contact.socialLinks.length > 0 && (
               <div className="flex items-center gap-2">
                 <span className="mr-2 text-[10px] font-bold uppercase tracking-[0.16em] text-[#6f8094]">
-                  Follow
+                  {sharedContent.footer.socialLabel}
                 </span>
                 {contact.socialLinks.map(({ id, label, href, platform, customIcon }) => (
                   <a
@@ -122,7 +122,7 @@ export function ContactFooterSection({ contact }: { contact: ContactSettings }) 
                     href={href}
                     target="_blank"
                     rel="noreferrer"
-                    aria-label={`Follow Phenix Labs on ${label}`}
+                    aria-label={`${sharedContent.footer.socialAriaPrefix} ${label}`}
                     className="flex size-10 items-center justify-center rounded-[13px] border border-white/[0.085] bg-white/[0.035] text-[#9aa9ba] transition-all hover:-translate-y-0.5 hover:border-[#58a7ff]/40 hover:bg-[#10243b] hover:text-[#67aeff]"
                   >
                     <SocialBrandIcon platform={platform} customIcon={customIcon} />

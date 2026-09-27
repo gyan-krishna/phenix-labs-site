@@ -1,6 +1,7 @@
 import { ImageResponse } from 'next/og'
+import { sharedContent } from '@/content/shared'
 
-export const alt = 'Phenix Labs — Engineering ideas into reality'
+export const alt = sharedContent.socialPreview.alt
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
@@ -63,15 +64,15 @@ export default function OpenGraphImage() {
               }}
             />
             <span style={{ fontSize: 28, fontWeight: 700, letterSpacing: 1 }}>
-              PHENIX LABS
+              {sharedContent.socialPreview.brand}
             </span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', maxWidth: 900 }}>
             <span style={{ fontSize: 72, lineHeight: 1.04, fontWeight: 700, letterSpacing: -3 }}>
-              Engineering ideas into reality.
+              {sharedContent.socialPreview.title}
             </span>
             <span style={{ marginTop: 25, fontSize: 27, color: '#b8cce0' }}>
-              PCB · Embedded Systems · Edge AI · Prototyping · Product Development
+              {sharedContent.socialPreview.capabilities}
             </span>
           </div>
         </div>

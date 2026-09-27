@@ -20,30 +20,13 @@ import {
   Boxes,
   GraduationCap,
 } from 'lucide-react'
+import { homeContent } from '@/content/home'
 
-const whatWeDo = [
-  {
-    number: '01',
-    title: 'Research',
-    icon: BookOpen,
-    copy: 'We explore robotics, AI, and automation to uncover practical ideas that can shape tomorrow’s products.',
-    accent: '#58a7ff',
-  },
-  {
-    number: '02',
-    title: 'Development',
-    icon: Boxes,
-    copy: 'We turn promising concepts into dependable hardware and software, from early prototypes through production.',
-    accent: '#ff9a43',
-  },
-  {
-    number: '03',
-    title: 'Education',
-    icon: GraduationCap,
-    copy: 'We make modern technology approachable through hands-on learning in robotics, AI, and automation.',
-    accent: '#a984ff',
-  },
-]
+const whatWeDoIcons = {
+  research: BookOpen,
+  development: Boxes,
+  education: GraduationCap,
+}
 
 function getHomeSpanClass(span: number) {
   if (span === 12) return 'lg:col-span-12'
@@ -96,7 +79,7 @@ export function HomePageContent({ testimonials, clients, services, inventions }:
       <ClientLogoMarquee clients={clients} />
 
       {/* Animated company statistics. */}
-      <section className="relative z-10 px-4 pb-14 pt-8 md:px-6.75 md:pb-16 md:pt-11" aria-label="Company highlights">
+      <section className="relative z-10 px-4 pb-14 pt-8 md:px-6.75 md:pb-16 md:pt-11" aria-label={homeContent.highlights.sectionLabel}>
         <div
           aria-hidden="true"
           className="absolute inset-x-0 bottom-0 h-36 bg-linear-to-b from-transparent to-[#dce8f2]/70"
@@ -107,12 +90,7 @@ export function HomePageContent({ testimonials, clients, services, inventions }:
             className="absolute left-1/2 top-1/2 size-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#58a7ff]/8 blur-3xl"
           />
           <div className="relative grid grid-cols-2 gap-y-10 md:grid-cols-4 md:gap-y-0">
-            {[
-              { value: 150, suffix: ' +', label: 'Designs Completed', color: '#d97822' },
-              { value: 50, suffix: ' +', label: 'Happy Clients', color: '#7957cf' },
-              { value: 12, suffix: ' +', label: 'Years of Experience', color: '#168ab3' },
-              { value: 2, suffix: ' +', label: 'Years in Business', color: '#5961cc' },
-            ].map(({ value, suffix, label, color }, index) => (
+            {homeContent.highlights.items.map(({ value, suffix, label, color }, index) => (
               <div
                 key={label}
                 className={`relative flex min-h-[116px] flex-col items-center justify-center px-3 text-center md:min-h-[138px] md:px-6 ${
@@ -143,7 +121,7 @@ export function HomePageContent({ testimonials, clients, services, inventions }:
       </section>
 
       {/* Dark visual break for Research, Development, and Education. */}
-      <section data-section-label="What we do" className="relative z-20 -mt-10 px-4 pb-4 pt-0 md:-mt-12 md:px-5.5">
+      <section data-section-label={homeContent.whatWeDo.sectionLabel} className="relative z-20 -mt-10 px-4 pb-4 pt-0 md:-mt-12 md:px-5.5">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute left-1/2 top-0 h-28 w-3/5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#2187e8]/16 blur-3xl"
@@ -157,20 +135,20 @@ export function HomePageContent({ testimonials, clients, services, inventions }:
           <div className="relative z-10 grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-end lg:gap-16">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#58a7ff]">
-                What We Do
+                {homeContent.whatWeDo.eyebrow}
               </p>
               <h2 className="mt-4 max-w-[560px] text-[36px] font-bold leading-[1.05] tracking-[-0.035em] md:text-[52px]">
-                Turning Ideas Into Reality
+                {homeContent.whatWeDo.title}
               </h2>
             </div>
             <p className="max-w-[690px] text-[16px] leading-8 text-[#aeb9c7] md:text-[18px]">
-              We bring research, product development, and practical education
-              together under one roof—creating useful technology while helping
-              the next generation understand how it works.
+              {homeContent.whatWeDo.description}
             </p>
           </div>
           <div className="relative z-10 mt-11 grid gap-4 md:grid-cols-3">
-            {whatWeDo.map(({ number, title, icon: Icon, copy, accent }) => (
+            {homeContent.whatWeDo.items.map(({ key, number, title, copy, accent }) => {
+              const Icon = whatWeDoIcons[key]
+              return (
               <article
                 key={title}
                 className="group relative min-h-[290px] overflow-hidden rounded-[20px] border border-white/[0.09] bg-white/[0.035] p-7 transition-all duration-500 hover:-translate-y-1 hover:border-white/[0.16] hover:bg-white/[0.06] md:p-8"
@@ -200,17 +178,17 @@ export function HomePageContent({ testimonials, clients, services, inventions }:
                   style={{ backgroundColor: accent }}
                 />
               </article>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>
 
       {/* Only CMS-selected Home services enter this alternating mosaic. */}
       {services.length > 0 && (
-      <section data-section-label="Services" className="px-5 py-20 md:py-[100px]">
-        <SectionIntro eyebrow="What we build" title="Our Services">
-          From the first circuit to the final interface, we build connected
-          solutions that are ready for the real world.
+      <section data-section-label={homeContent.services.sectionLabel} className="px-5 py-20 md:py-[100px]">
+        <SectionIntro eyebrow={homeContent.services.eyebrow} title={homeContent.services.title}>
+          {homeContent.services.description}
         </SectionIntro>
         <div className="mx-auto mt-14 grid max-w-[1236px] gap-5 sm:grid-cols-2 lg:grid-cols-12">
           {services.map((service, index) => {
@@ -223,8 +201,8 @@ export function HomePageContent({ testimonials, clients, services, inventions }:
             return (
               <Link
                 key={id}
-                href="/services#engineering-services"
-                aria-label={`Explore ${title}`}
+                href={homeContent.services.target}
+                aria-label={`${homeContent.services.cardActionPrefix} ${title}`}
                 className={`group relative flex min-h-[320px] overflow-hidden rounded-[20px] border p-7 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[0_28px_70px_rgba(22,34,54,0.16)] md:p-9 ${fillsTabletRow ? 'sm:col-span-2' : 'sm:col-span-1'} ${span} ${
                   isDark
                     ? 'border-[#263b54] bg-[#111d2d] text-white'
@@ -321,7 +299,7 @@ export function HomePageContent({ testimonials, clients, services, inventions }:
             href="/services"
             className="group inline-flex h-[52px] items-center gap-2 rounded-full bg-[#0064d7] px-8 font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-[#0055b8] hover:shadow-[0_14px_35px_rgba(0,100,215,0.25)]"
           >
-            Explore all services
+            {homeContent.services.allAction}
             <ArrowUpRight
               aria-hidden="true"
               className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"

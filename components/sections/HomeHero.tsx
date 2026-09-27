@@ -4,8 +4,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
+import { homeContent } from '@/content/home'
 
-const capabilities = ['Research-led', 'Built end to end', 'Ready for the real world']
 
 /** Responsive Home hero with animated robotic-hand artwork and reduced-motion support. */
 export function HomeHero() {
@@ -13,7 +13,7 @@ export function HomeHero() {
   const duration = shouldReduceMotion ? 0 : 0.75
 
   return (
-    <section data-section-label="Introduction" className="relative min-h-[720px] overflow-hidden bg-[#eaf0f4] px-5 pb-[190px] pt-[108px] md:min-h-[710px] md:pb-[180px] md:pt-[116px] xl:min-h-[680px] xl:pb-20">
+    <section data-section-label={homeContent.hero.sectionLabel} className="relative min-h-[720px] overflow-hidden bg-[#eaf0f4] px-5 pb-[190px] pt-[108px] md:min-h-[710px] md:pb-[180px] md:pt-[116px] xl:min-h-[680px] xl:pb-20">
       {/* Background grid and central atmospheric glow. */}
       <div
         aria-hidden="true"
@@ -85,7 +85,7 @@ export function HomeHero() {
           transition={{ duration, ease: [0.22, 1, 0.36, 1] }}
           className="rounded-full border border-[#abc3d5]/80 bg-[#edf4f7]/75 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.2em] text-[#005ec7] shadow-[0_8px_30px_rgba(22,34,54,0.06)] backdrop-blur-md sm:text-xs"
         >
-          Research · Engineering · Education
+          {homeContent.hero.eyebrow}
         </motion.p>
 
         <motion.h1
@@ -94,9 +94,9 @@ export function HomeHero() {
           transition={{ duration, delay: shouldReduceMotion ? 0 : 0.08, ease: [0.22, 1, 0.36, 1] }}
           className="mt-6 max-w-[900px] text-[46px] font-bold leading-[0.96] tracking-[-0.05em] text-[#08111f] sm:text-[58px] md:mt-7 md:text-[72px] lg:text-[80px] xl:max-w-[820px]"
         >
-          Research Driven Product{' '}
+          {homeContent.hero.title}{' '}
           <span className="bg-linear-to-r from-[#0064d7] to-[#39a8d2] bg-clip-text text-transparent">
-            Development.
+            {homeContent.hero.highlightedTitle}
           </span>
         </motion.h1>
 
@@ -106,7 +106,7 @@ export function HomeHero() {
           transition={{ duration, delay: shouldReduceMotion ? 0 : 0.16, ease: [0.22, 1, 0.36, 1] }}
           className="mt-6 max-w-[660px] text-[16px] leading-7 text-[#465566] md:mt-7 md:text-[19px] md:leading-8"
         >
-          "The best way to predict the future is to invent it."
+          {homeContent.hero.quote}
         </motion.p>
 
         <motion.div
@@ -116,10 +116,10 @@ export function HomeHero() {
           className="mt-8 flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row"
         >
           <Link
-            href="/products"
+            href={homeContent.hero.primaryAction.href}
             className="group inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-[#0064d7] px-7 font-semibold text-white shadow-[0_14px_35px_rgba(0,100,215,0.23)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#0055b8] hover:shadow-[0_18px_42px_rgba(0,100,215,0.3)] sm:w-auto"
           >
-            Explore our work
+            {homeContent.hero.primaryAction.label}
             <ArrowUpRight
               aria-hidden="true"
               size={18}
@@ -127,10 +127,10 @@ export function HomeHero() {
             />
           </Link>
           <Link
-            href="/services"
+            href={homeContent.hero.secondaryAction.href}
             className="inline-flex h-14 w-full items-center justify-center rounded-full border border-[#9fb3c2] bg-[#edf4f7]/65 px-7 font-semibold text-[#162236] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0064d7] hover:bg-[#f4f8fa] hover:text-[#0064d7] sm:w-auto"
           >
-            See our services
+            {homeContent.hero.secondaryAction.label}
           </Link>
         </motion.div>
 
@@ -140,7 +140,7 @@ export function HomeHero() {
           transition={{ duration, delay: shouldReduceMotion ? 0 : 0.4 }}
           className="mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[12px] font-semibold text-[#5c6d7d] md:mt-12 md:gap-x-7 md:text-sm"
         >
-          {capabilities.map((capability, index) => (
+          {homeContent.hero.capabilities.map((capability, index) => (
             <span key={capability} className="flex items-center gap-2">
               <span
                 aria-hidden="true"

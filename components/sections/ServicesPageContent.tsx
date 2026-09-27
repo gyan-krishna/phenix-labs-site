@@ -23,36 +23,17 @@ import {
   Rocket,
   ScanSearch,
 } from 'lucide-react'
+import { servicesContent } from '@/content/services'
 
-const categories = [
-  {
-    number: '01',
-    title: 'Academic & Research',
-    icon: BookOpen,
-    description: 'Accelerating research through custom instrumentation, rapid prototyping, and collaborative engineering.',
-    accent: '#ff895d',
-    benefits: ['Research-focused engineering', 'Rapid prototype development', 'Iterative development with researcher feedback', 'Interdisciplinary expertise', 'Laboratory to real-world deployment'],
-    tags: ['Research Instrumentation', 'Embedded Systems', 'AI & Edge Computing'],
-  },
-  {
-    number: '02',
-    title: 'Industrial',
-    icon: Boxes,
-    description: 'Building reliable and scalable engineering solutions for automation, manufacturing, and industrial applications.',
-    accent: '#ffc85d',
-    benefits: ['Industry-ready solutions', 'Rapid prototyping to production', 'End-to-end product development', 'Innovation-driven engineering', 'Design for manufacturing (DFM)'],
-    tags: ['Instrumentation & Control', 'Industrial IoT', 'Robotics'],
-  },
-]
-
-const processSteps = [
-  { number: '01', shortTitle: 'Concept', title: 'Consultation', copy: 'Initial idea, define requirement, scope and feasibility.', icon: Lightbulb, accent: '#58a7ff' },
-  { number: '02', shortTitle: 'Strategy', title: 'Concept Development', copy: 'Feasibility analysis and architecture planning.', icon: Map, accent: '#45c9e8' },
-  { number: '03', shortTitle: 'Creation', title: 'Design', copy: 'Product schematics, CAD and software architecture.', icon: PenTool, accent: '#a984ff' },
-  { number: '04', shortTitle: 'Build', title: 'Prototype', copy: 'Physical build and preliminary functional validation.', icon: Hammer, accent: '#ff9a43' },
-  { number: '05', shortTitle: 'Refine', title: 'Testing & Iteration', copy: 'Rigorous testing and performance tuning.', icon: ScanSearch, accent: '#52cbb5' },
-  { number: '06', shortTitle: 'Launch', title: 'Deployment & Support', copy: 'Final documentation, training and on-site delivery support.', icon: Rocket, accent: '#8b90ff' },
-]
+const audienceIcons = { academic: BookOpen, industrial: Boxes }
+const processIcons = {
+  consultation: Lightbulb,
+  concept: Map,
+  design: PenTool,
+  prototype: Hammer,
+  testing: ScanSearch,
+  deployment: Rocket,
+}
 
 const roadmapOrbitPositions = [
   'lg:left-[5%] lg:top-[3%]',
@@ -93,7 +74,7 @@ export function ServicesPageContent({ services }: ServicesPageContentProps) {
   return (
     <div className="overflow-hidden bg-[#ecf1f5] text-[#08111f]">
       {/* Page hero keeps copy readable while artwork decorates large viewports. */}
-      <section data-section-label="Services overview" className="relative min-h-[620px] overflow-hidden bg-[#eaf0f4] px-5">
+      <section data-section-label={servicesContent.hero.sectionLabel} className="relative min-h-[620px] overflow-hidden bg-[#eaf0f4] px-5">
         <div
           aria-hidden="true"
           className="absolute inset-0 opacity-[0.2] [background-image:linear-gradient(rgba(22,34,54,.1)_1px,transparent_1px),linear-gradient(90deg,rgba(22,34,54,.1)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:linear-gradient(to_bottom,black,transparent_90%)]"
@@ -101,21 +82,21 @@ export function ServicesPageContent({ services }: ServicesPageContentProps) {
         <div aria-hidden="true" className="absolute -right-40 top-4 size-[620px] rounded-full bg-[#64c8ef]/18 blur-[115px]" />
         <div className="relative mx-auto grid min-h-[620px] max-w-[1236px] items-center gap-10 py-20 lg:grid-cols-[1.1fr_0.9fr] lg:py-14">
           <motion.div initial="hidden" animate="visible" variants={reveal} className="relative z-10 max-w-[760px]">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#0064d7]">Engineering partnerships</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#0064d7]">{servicesContent.hero.eyebrow}</p>
             <h1 className="mt-5 text-[44px] font-bold leading-[1.02] tracking-[-0.045em] sm:text-[56px] md:text-[68px]">
-              Engineering solutions built for the{' '}
-              <span className="bg-linear-to-r from-[#0064d7] to-[#38a4cc] bg-clip-text text-transparent">real world.</span>
+              {servicesContent.hero.title}{' '}
+              <span className="bg-linear-to-r from-[#0064d7] to-[#38a4cc] bg-clip-text text-transparent">{servicesContent.hero.highlightedTitle}</span>
             </h1>
             <p className="mt-7 max-w-[700px] text-[16px] leading-8 text-[#4b5b6c] md:text-[19px]">
-              Phenix Labs partners with industries, research organizations, and academic institutions to transform ideas into reliable engineering solutions. From custom electronics and embedded systems to rapid prototyping and product development, we provide end-to-end support from concept to deployment.
+              {servicesContent.hero.description}
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link href="/contact" className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-[#0064d7] px-7 font-semibold text-white shadow-[0_14px_35px_rgba(0,100,215,0.22)] transition-all hover:-translate-y-0.5 hover:bg-[#0055b8]">
-                Discuss your project
+                {servicesContent.hero.primaryAction}
                 <ArrowUpRight aria-hidden="true" size={18} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </Link>
               <Link href="#development-process" className="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-[#a9bbc9] bg-white/45 px-7 font-semibold text-[#162236] backdrop-blur-sm transition-colors hover:border-[#0064d7] hover:text-[#0064d7]">
-                See our process
+                {servicesContent.hero.secondaryAction}
                 <ArrowDownRight aria-hidden="true" size={18} />
               </Link>
             </div>
@@ -130,17 +111,17 @@ export function ServicesPageContent({ services }: ServicesPageContentProps) {
             <div className="absolute -inset-4 rotate-3 rounded-[32px] border border-[#b8cad7]/70 bg-white/30" />
             <div className="relative overflow-hidden rounded-[28px] border border-white/80 bg-white/72 p-5 shadow-[0_28px_80px_rgba(22,34,54,0.13)] backdrop-blur-md md:p-8">
               <div className="mb-5 flex items-center justify-between border-b border-[#d6e0e7] pb-4 text-[11px] font-bold uppercase tracking-[0.18em] text-[#718192]">
-                <span>System architecture</span>
-                <span className="flex items-center gap-2"><span className="size-2 rounded-full bg-[#52cbb5]" />Ready to build</span>
+                <span>{servicesContent.hero.imageEyebrow}</span>
+                <span className="flex items-center gap-2"><span className="size-2 rounded-full bg-[#52cbb5]" />{servicesContent.hero.imageStatus}</span>
               </div>
-              <Image src="/images/services-hero.png" alt="Engineering system blueprint" width={500} height={496} priority className="h-auto w-full object-contain mix-blend-multiply" />
+              <Image src="/images/services-hero.png" alt={servicesContent.hero.imageAlt} width={500} height={496} priority className="h-auto w-full object-contain mix-blend-multiply" />
             </div>
           </motion.div>
         </div>
       </section>
 
       {/* Capability categories use a dark visual break from surrounding sections. */}
-      <section data-section-label="Who we serve" className="relative bg-[#0a101d] px-5 py-20 text-white md:py-[108px]">
+      <section data-section-label={servicesContent.audiences.sectionLabel} className="relative bg-[#0a101d] px-5 py-20 text-white md:py-[108px]">
         <div aria-hidden="true" className="absolute left-[-180px] top-16 size-[420px] rounded-full bg-[#0064d7]/12 blur-[110px]" />
         <div
           aria-hidden="true"
@@ -153,14 +134,16 @@ export function ServicesPageContent({ services }: ServicesPageContentProps) {
         <div className="relative mx-auto max-w-[1236px]">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.35 }} variants={reveal} className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-end lg:gap-16">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#58a7ff]">Where we help</p>
-              <h2 className="mt-4 text-[36px] font-bold leading-[1.05] tracking-[-0.035em] md:text-[52px]">Built for research and industry</h2>
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#58a7ff]">{servicesContent.audiences.eyebrow}</p>
+              <h2 className="mt-4 text-[36px] font-bold leading-[1.05] tracking-[-0.035em] md:text-[52px]">{servicesContent.audiences.title}</h2>
             </div>
-            <p className="max-w-[650px] text-[16px] leading-8 text-[#9facbb] md:text-[18px]">The same end-to-end engineering discipline, adapted to the different realities of laboratories, institutions, and production environments.</p>
+            <p className="max-w-[650px] text-[16px] leading-8 text-[#9facbb] md:text-[18px]">{servicesContent.audiences.description}</p>
           </motion.div>
 
           <div className="mt-12 grid gap-5 lg:grid-cols-2 lg:gap-6">
-            {categories.map(({ number, title, icon: Icon, description, accent, benefits, tags }, index) => (
+            {servicesContent.audiences.items.map(({ key, number, title, description, accent, benefits, tags }, index) => {
+              const Icon = audienceIcons[key]
+              return (
               <motion.article
                 key={title}
                 initial="hidden"
@@ -178,7 +161,7 @@ export function ServicesPageContent({ services }: ServicesPageContentProps) {
                 <div className="relative z-10 mt-7">
                   <h3 className="text-[28px] font-bold tracking-[-0.025em] md:text-[34px]">{title}</h3>
                   <p className="mt-3 max-w-[520px] text-[15px] leading-7 text-[#aeb9c7] md:text-[16px]">{description}</p>
-                  <p className="mt-8 text-xs font-bold uppercase tracking-[0.18em]" style={{ color: accent }}>Why Phenix Labs</p>
+                  <p className="mt-8 text-xs font-bold uppercase tracking-[0.18em]" style={{ color: accent }}>{servicesContent.audiences.benefitLabel}</p>
                   <ul className="mt-5 grid gap-3 sm:grid-cols-2">
                     {benefits.map((benefit) => <li key={benefit} className="flex gap-2.5 text-[13px] leading-5 text-[#c0cad5]"><span className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full" style={{ color: accent, backgroundColor: `${accent}18` }}><Check size={11} strokeWidth={2.5} /></span>{benefit}</li>)}
                   </ul>
@@ -187,38 +170,34 @@ export function ServicesPageContent({ services }: ServicesPageContentProps) {
                   </div>
                 </div>
               </motion.article>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>
 
       {/* Animated circular roadmap; reduced-motion visitors receive its static state. */}
-      <section id="development-process" data-section-label="Development process" className="relative scroll-mt-24 overflow-hidden bg-[#fdfdfd] px-5 py-20 md:py-[108px]">
+      <section id="development-process" data-section-label={servicesContent.process.sectionLabel} className="relative scroll-mt-24 overflow-hidden bg-[#fdfdfd] px-5 py-20 md:py-[108px]">
         <div aria-hidden="true" className="absolute inset-0 opacity-[0.07] [background-image:linear-gradient(rgba(22,34,54,.55)_1px,transparent_1px),linear-gradient(90deg,rgba(22,34,54,.55)_1px,transparent_1px)] [background-size:38px_38px] [mask-image:linear-gradient(to_bottom,transparent,black_8%,black_92%,transparent)]" />
         <div aria-hidden="true" className="absolute -left-40 top-1/3 size-[440px] rounded-full bg-[#0064d7]/8 blur-[120px]" />
         <div aria-hidden="true" className="absolute -right-44 bottom-20 size-[420px] rounded-full bg-[#a984ff]/7 blur-[120px]" />
         <div className="relative z-10 mx-auto max-w-[1236px]">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.35 }} variants={reveal} className="flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-[720px]">
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#0064d7]">From idea to deployment</p>
-              <h2 className="mt-4 text-[36px] font-bold leading-[1.05] tracking-[-0.035em] md:text-[52px]">Our Development Process</h2>
-              <p className="mt-5 max-w-[650px] text-[16px] leading-8 text-[#536273] md:text-[18px]">A clear engineering path with room to learn, test, and refine before a solution reaches the real world.</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#0064d7]">{servicesContent.process.eyebrow}</p>
+              <h2 className="mt-4 text-[36px] font-bold leading-[1.05] tracking-[-0.035em] md:text-[52px]">{servicesContent.process.title}</h2>
+              <p className="mt-5 max-w-[650px] text-[16px] leading-8 text-[#536273] md:text-[18px]">{servicesContent.process.description}</p>
             </div>
             <div className="flex w-fit items-center gap-3 rounded-full border border-[#cbd9e3] bg-white px-4 py-2.5 text-sm font-semibold text-[#536273] shadow-[0_10px_30px_rgba(22,34,54,0.06)]">
               <span className="relative flex size-2.5">
                 {!shouldReduceMotion && <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#52cbb5] opacity-60" />}
                 <span className="relative inline-flex size-2.5 rounded-full bg-[#52cbb5]" />
               </span>
-              6 connected stages
+              {servicesContent.process.stageCount}
             </div>
           </motion.div>
 
           <div className="relative mt-12 py-6 md:px-5 md:py-10 lg:px-10">
-            {/* <div className="relative z-10 mb-8 flex items-center justify-between border-b border-[#cad7e0] pb-5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#6a7a8b] md:text-xs">
-              <span>Phenix development route</span>
-              <span className="hidden items-center gap-2 sm:flex"><span className="size-1.5 rounded-full bg-[#45c9e8]" />Concept to deployment</span>
-            </div> */}
-
             <div className="relative lg:h-[850px]">
               <svg aria-hidden="true" viewBox="0 0 850 850" preserveAspectRatio="xMidYMid meet" className="absolute inset-0 hidden h-full w-full lg:block">
                 <defs>
@@ -272,15 +251,16 @@ export function ServicesPageContent({ services }: ServicesPageContentProps) {
                 <div className="mx-auto flex size-16 items-center justify-center rounded-full border border-[#45c9e8]/40 bg-white/80 text-[#008db5] shadow-[0_16px_40px_rgba(22,34,54,0.1)]">
                   <CircuitBoard aria-hidden="true" size={29} strokeWidth={1.6} />
                 </div>
-                <p className="mt-6 text-[11px] font-bold uppercase tracking-[0.24em] text-[#58a7ff]">One connected journey</p>
+                <p className="mt-6 text-[11px] font-bold uppercase tracking-[0.24em] text-[#58a7ff]">{servicesContent.process.centerEyebrow}</p>
                 <h3 className="mt-3 text-[34px] font-bold leading-[1.05] tracking-[-0.04em] text-[#111827]">
-                  From concept to <span className="text-[#009bc4]">reality.</span>
+                  {servicesContent.process.centerTitle} <span className="text-[#009bc4]">{servicesContent.process.centerHighlight}</span>
                 </h3>
-                <p className="mx-auto mt-4 max-w-[270px] text-[14px] leading-6 text-[#607183]">Every stage informs the next, creating one clear route from idea to deployment.</p>
+                <p className="mx-auto mt-4 max-w-[270px] text-[14px] leading-6 text-[#607183]">{servicesContent.process.centerDescription}</p>
               </motion.div>
 
               <div className="relative flex flex-col gap-5 pl-9 lg:block lg:h-[850px] lg:pl-0">
-                {processSteps.map(({ number, shortTitle, title, copy, icon: Icon, accent }, index) => {
+                {servicesContent.process.steps.map(({ key, number, shortTitle, title, copy, accent }, index) => {
+                  const Icon = processIcons[key]
                   return (
                     <motion.article
                       key={number}
@@ -313,15 +293,15 @@ export function ServicesPageContent({ services }: ServicesPageContentProps) {
 
       {/* All published services enter the shared alternating mosaic layout. */}
       {services.length > 0 && (
-      <section id="engineering-services" data-section-label="Engineering services" className="scroll-mt-24 bg-[#dfe8ef] px-5 py-20 md:py-[108px]">
+      <section id="engineering-services" data-section-label={servicesContent.catalogue.sectionLabel} className="scroll-mt-24 bg-[#dfe8ef] px-5 py-20 md:py-[108px]">
         <div className="mx-auto max-w-[1236px]">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.35 }} variants={reveal} className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-[720px]">
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#0064d7]">Technical capabilities</p>
-              <h2 className="mt-4 text-[36px] font-bold leading-[1.05] tracking-[-0.035em] md:text-[52px]">Engineering Services</h2>
-              <p className="mt-5 max-w-[650px] text-[16px] leading-8 text-[#536273] md:text-[18px]">Focused expertise across electronics, embedded intelligence, product design, and system delivery.</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#0064d7]">{servicesContent.catalogue.eyebrow}</p>
+              <h2 className="mt-4 text-[36px] font-bold leading-[1.05] tracking-[-0.035em] md:text-[52px]">{servicesContent.catalogue.title}</h2>
+              <p className="mt-5 max-w-[650px] text-[16px] leading-8 text-[#536273] md:text-[18px]">{servicesContent.catalogue.description}</p>
             </div>
-            <Link href="/contact" className="group inline-flex w-fit items-center gap-2 border-b border-[#8199ab] pb-2 text-sm font-semibold text-[#162236] transition-colors hover:border-[#0064d7] hover:text-[#0064d7]">Start a conversation <ArrowUpRight aria-hidden="true" size={17} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></Link>
+            <Link href="/contact" className="group inline-flex w-fit items-center gap-2 border-b border-[#8199ab] pb-2 text-sm font-semibold text-[#162236] transition-colors hover:border-[#0064d7] hover:text-[#0064d7]">{servicesContent.catalogue.action} <ArrowUpRight aria-hidden="true" size={17} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></Link>
           </motion.div>
 
           <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-12">
@@ -350,7 +330,7 @@ export function ServicesPageContent({ services }: ServicesPageContentProps) {
                       <div className="flex items-center gap-3.5">
                         <span className="flex size-13 items-center justify-center rounded-[16px] border" style={{ color, borderColor: `${color}45`, backgroundColor: `${color}18` }}><ServiceIcon name={icon} aria-hidden="true" size={26} strokeWidth={1.8} /></span>
                         <div>
-                          <p className={`text-[10px] font-bold uppercase tracking-[0.18em] ${isDark ? 'text-[#91a1b5]' : 'text-[#708093]'}`}>Engineering service</p>
+                          <p className={`text-[10px] font-bold uppercase tracking-[0.18em] ${isDark ? 'text-[#91a1b5]' : 'text-[#708093]'}`}>{servicesContent.catalogue.cardLabel}</p>
                           <p className="mt-1 text-xs font-bold tabular-nums" style={{ color }}>/ {String(index + 1).padStart(2, '0')}</p>
                         </div>
                       </div>
@@ -372,13 +352,13 @@ export function ServicesPageContent({ services }: ServicesPageContentProps) {
             <div aria-hidden="true" className="absolute -right-24 top-1/2 size-72 -translate-y-1/2 rounded-full bg-[#a984ff]/15 blur-[80px]" />
             <div className="relative z-10 grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#58a7ff]">Let&apos;s build it together</p>
-                <h2 className="mt-4 max-w-[650px] text-[30px] font-bold leading-tight tracking-[-0.03em] md:text-[44px]">Have an idea or an engineering challenge?</h2>
-                <p className="mt-4 max-w-[590px] text-[15px] leading-7 text-[#aeb9c7] md:text-[17px]">Tell us what you are trying to solve, and we will help identify the clearest path from concept to working system.</p>
+                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#58a7ff]">{servicesContent.contact.eyebrow}</p>
+                <h2 className="mt-4 max-w-[650px] text-[30px] font-bold leading-tight tracking-[-0.03em] md:text-[44px]">{servicesContent.contact.title}</h2>
+                <p className="mt-4 max-w-[590px] text-[15px] leading-7 text-[#aeb9c7] md:text-[17px]">{servicesContent.contact.description}</p>
                 <div className="mt-8 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
-                  <Link href="/contact" className="group inline-flex h-13 items-center justify-center gap-2 rounded-full bg-[#0064d7] px-7 font-semibold text-white shadow-[0_14px_34px_rgba(0,100,215,0.25)] transition-all hover:-translate-y-0.5 hover:bg-[#1475e8] hover:shadow-[0_18px_40px_rgba(0,100,215,0.32)]">Discuss your project <ArrowUpRight aria-hidden="true" size={18} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></Link>
+                  <Link href="/contact" className="group inline-flex h-13 items-center justify-center gap-2 rounded-full bg-[#0064d7] px-7 font-semibold text-white shadow-[0_14px_34px_rgba(0,100,215,0.25)] transition-all hover:-translate-y-0.5 hover:bg-[#1475e8] hover:shadow-[0_18px_40px_rgba(0,100,215,0.32)]">{servicesContent.contact.primaryAction} <ArrowUpRight aria-hidden="true" size={18} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></Link>
                   <Link href="#development-process" className="group inline-flex items-center gap-2 border-b border-[#62758b] pb-1.5 text-sm font-semibold text-[#b7c3d0] transition-colors hover:border-[#58a7ff] hover:text-[#67aeff]">
-                    Review our process
+                    {servicesContent.contact.secondaryAction}
                     <ArrowUpRight aria-hidden="true" size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </Link>
                 </div>
@@ -388,15 +368,11 @@ export function ServicesPageContent({ services }: ServicesPageContentProps) {
                 <div aria-hidden="true" className="absolute -right-16 -top-16 size-44 rounded-full bg-[#58a7ff]/12 blur-3xl" />
                 <div className="relative">
                   <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
-                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#67aeff]">What happens next</p>
-                    <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#66798e]">Simple &amp; focused</span>
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#67aeff]">{servicesContent.contact.nextEyebrow}</p>
+                    <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#66798e]">{servicesContent.contact.nextLabel}</span>
                   </div>
                   <div className="mt-2">
-                    {[
-                      ['01', 'Share the challenge', 'Give us the useful context, constraints, and outcome.'],
-                      ['02', 'We assess the fit', 'Our team reviews the technical direction and scope.'],
-                      ['03', 'Receive a clear next step', 'We respond with the most practical way to move forward.'],
-                    ].map(([number, title, copy], index) => (
+                    {servicesContent.contact.steps.map(({ number, title, copy }, index) => (
                       <div key={number} className={`flex gap-4 py-4 ${index < 2 ? 'border-b border-white/[0.07]' : ''}`}>
                         <span className="flex size-10 shrink-0 items-center justify-center rounded-[13px] border border-[#58a7ff]/20 bg-[#102943] text-xs font-bold text-[#67aeff]">{number}</span>
                         <div>

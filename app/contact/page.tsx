@@ -17,14 +17,12 @@ import {
   getBreadcrumbSchema,
   getWebPageSchema,
 } from '@/lib/seo'
+import { contactContent } from '@/content/contact'
+import { sharedContent } from '@/content/shared'
 
 /** Contact route combining persisted contact settings with the enquiry form. */
 export const metadata: Metadata = generateMetadata({
-  title: 'Contact Phenix Labs for an Engineering Project',
-  description:
-    'Contact Phenix Labs in Thiruvananthapuram to discuss an engineering, PCB, firmware, embedded system, research, prototyping, or product development project.',
-  keywords: ['contact Phenix Labs', 'engineering enquiry', 'project discussion'],
-  path: '/contact',
+  ...contactContent.metadata,
 })
 
 export default async function Contact() {
@@ -37,14 +35,14 @@ export default async function Contact() {
   const directChannels = [
     {
       icon: Phone,
-      label: 'Call us',
+      label: contactContent.details.callLabel,
       value: contact.phone,
       note: contact.hours,
       href: contact.phoneHref,
     },
     {
       icon: Mail,
-      label: 'Email us',
+      label: contactContent.details.emailLabel,
       value: contact.email,
       note: contact.responseTime,
       href: contact.emailHref,
@@ -56,20 +54,19 @@ export default async function Contact() {
       <JsonLd
         data={[
           getWebPageSchema({
-            title: 'Contact Phenix Labs',
-            description:
-              'Contact details and enquiry form for engineering, research, and product development projects.',
-            path: '/contact',
+            title: contactContent.metadata.schemaTitle,
+            description: contactContent.metadata.schemaDescription,
+            path: contactContent.metadata.path,
             type: 'ContactPage',
           }),
           getBreadcrumbSchema([
-            { name: 'Home', path: '/' },
-            { name: 'Contact', path: '/contact' },
+            { name: sharedContent.breadcrumbs.home, path: '/' },
+            { name: contactContent.metadata.breadcrumbLabel, path: contactContent.metadata.path },
           ]),
         ]}
       />
       <div className="overflow-hidden bg-[#ecf1f5] text-[#08111f]">
-        <section data-section-label="Contact overview" className="relative px-5 pb-20 pt-20 md:pb-24 md:pt-24">
+        <section data-section-label={contactContent.hero.sectionLabel} className="relative px-5 pb-20 pt-20 md:pb-24 md:pt-24">
           <div
             aria-hidden="true"
             className="absolute inset-0 opacity-[0.18] [background-image:linear-gradient(rgba(22,34,54,.12)_1px,transparent_1px),linear-gradient(90deg,rgba(22,34,54,.12)_1px,transparent_1px)] [background-size:54px_54px] [mask-image:linear-gradient(to_bottom,black,transparent_92%)]"
@@ -80,24 +77,22 @@ export default async function Contact() {
           <div className="relative mx-auto grid max-w-[1236px] gap-12 lg:grid-cols-[1.12fr_0.88fr] lg:items-end lg:gap-20">
             <div>
               <p className="text-sm font-bold uppercase tracking-[0.24em] text-[#0064d7]">
-                Start a conversation
+                {contactContent.hero.eyebrow}
               </p>
               <h1 className="mt-5 max-w-[800px] text-[46px] font-bold leading-[0.98] tracking-[-0.05em] sm:text-[58px] md:text-[72px]">
-                Bring us the problem. We&apos;ll help shape the{' '}
+                {contactContent.hero.title}{' '}
                 <span className="bg-linear-to-r from-[#0064d7] to-[#38a4cc] bg-clip-text text-transparent">
-                  path forward.
+                  {contactContent.hero.highlightedTitle}
                 </span>
               </h1>
               <p className="mt-7 max-w-[700px] text-[17px] leading-8 text-[#4c5d6f] md:text-[19px]">
-                Whether you are developing a product, advancing research, or
-                planning a technical learning initiative, share the context and
-                we will help identify a practical next step.
+                {contactContent.hero.description}
               </p>
               <a
                 href="#contact-form"
                 className="group mt-9 inline-flex h-13 items-center gap-2 rounded-full border border-[#a9bbc9] bg-white/55 px-6 font-semibold text-[#26374a] shadow-[0_12px_34px_rgba(22,34,54,0.07)] backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-[#0064d7]/45 hover:text-[#0064d7]"
               >
-                Send an enquiry
+                {contactContent.hero.action}
                 <ArrowDownRight aria-hidden="true" size={18} className="transition-transform group-hover:translate-y-0.5" />
               </a>
             </div>
@@ -110,17 +105,13 @@ export default async function Contact() {
                     <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#4dbf91] opacity-50" />
                     <span className="relative inline-flex size-3 rounded-full bg-[#38a978]" />
                   </span>
-                  <span className="text-sm font-bold text-[#26374a]">Project desk is open</span>
+                  <span className="text-sm font-bold text-[#26374a]">{contactContent.hero.status}</span>
                 </div>
                 <p className="mt-6 text-xs font-bold uppercase tracking-[0.18em] text-[#0064d7]">
-                  Helpful starting points
+                  {contactContent.hero.startingPointsLabel}
                 </p>
                 <ul className="mt-5 space-y-4 text-sm leading-6 text-[#536476]">
-                  {[
-                    'What you are trying to build or improve',
-                    'Current stage, constraints, and desired outcome',
-                    'Any useful timeline, files, or technical context',
-                  ].map((item, index) => (
+                  {contactContent.hero.startingPoints.map((item, index) => (
                     <li key={item} className="flex gap-3">
                       <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[#e5f1fc] text-[11px] font-bold text-[#0064d7]">
                         {String(index + 1).padStart(2, '0')}
@@ -134,18 +125,18 @@ export default async function Contact() {
           </div>
         </section>
 
-        <section id="contact-form" data-section-label="Project enquiry" className="scroll-mt-24 px-5 pb-24 md:pb-30">
+        <section id="contact-form" data-section-label={contactContent.details.sectionLabel} className="scroll-mt-24 px-5 pb-24 md:pb-30">
           <div className="mx-auto grid max-w-[1236px] gap-6 lg:grid-cols-[0.78fr_1.22fr] lg:items-start">
             <div className="relative overflow-hidden rounded-[20px] bg-[#0b1523] p-7 text-white shadow-[0_24px_65px_rgba(22,34,54,0.14)] sm:p-9 lg:sticky lg:top-24">
               <div aria-hidden="true" className="absolute inset-0 opacity-[0.16] [background-image:radial-gradient(rgba(88,167,255,.85)_1px,transparent_1.2px)] [background-size:25px_25px]" />
               <div aria-hidden="true" className="absolute -left-24 top-10 size-64 rounded-full bg-[#0064d7]/22 blur-[85px]" />
               <div className="relative">
-                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#67aeff]">Direct contact</p>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#67aeff]">{contactContent.details.eyebrow}</p>
                 <h2 className="mt-3 text-[30px] font-bold tracking-[-0.035em] sm:text-[38px]">
-                  Prefer to reach us directly?
+                  {contactContent.details.title}
                 </h2>
                 <p className="mt-4 text-[15px] leading-7 text-[#9eacbc]">
-                  Choose the channel that works best for you. For detailed project discussions, the enquiry form helps us prepare before replying.
+                  {contactContent.details.description}
                 </p>
 
                 <div className="mt-8 space-y-3">
@@ -174,7 +165,7 @@ export default async function Contact() {
                       <MapPin aria-hidden="true" size={20} />
                     </span>
                     <div>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#718297]">Visit us</p>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#718297]">{contactContent.details.addressLabel}</p>
                       <address className="mt-1 text-sm font-medium not-italic leading-6 text-[#d9e2eb]">
                         {contact.address}
                       </address>
@@ -184,14 +175,14 @@ export default async function Contact() {
 
                 {contact.socialLinks.length > 0 && (
                   <div className="mt-8 flex flex-wrap items-center gap-2 border-t border-white/[0.08] pt-7">
-                    <span className="mr-2 text-[10px] font-bold uppercase tracking-[0.16em] text-[#718297]">Follow</span>
+                    <span className="mr-2 text-[10px] font-bold uppercase tracking-[0.16em] text-[#718297]">{contactContent.details.socialLabel}</span>
                     {contact.socialLinks.map(({ id, label, href, platform, customIcon }) => (
                       <a
                         key={id}
                         href={href}
                         target="_blank"
                         rel="noreferrer"
-                        aria-label={`Follow Phenix Labs on ${label}`}
+                        aria-label={`${contactContent.details.socialAriaPrefix} ${label}`}
                         className="flex size-10 items-center justify-center rounded-[13px] border border-white/[0.085] bg-white/[0.04] text-[#9baabd] transition-all hover:-translate-y-0.5 hover:border-[#58a7ff]/40 hover:text-[#67aeff]"
                       >
                         <SocialBrandIcon platform={platform} customIcon={customIcon} />
@@ -209,15 +200,15 @@ export default async function Contact() {
                     <AlarmClock aria-hidden="true" size={19} />
                   </span>
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#0064d7]">Project enquiry</p>
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#0064d7]">{contactContent.enquiry.eyebrow}</p>
                     <p className="mt-1 text-xs text-[#718091]">{contact.responseTime}</p>
                   </div>
                 </div>
                 <h2 className="mt-6 text-[30px] font-bold tracking-[-0.035em] text-[#162236] md:text-[40px]">
-                  Tell us what you&apos;re working on.
+                  {contactContent.enquiry.title}
                 </h2>
                 <p className="mt-3 text-sm leading-7 text-[#607183]">
-                  Required fields are marked with an asterisk. Include as much context as is useful at this stage.
+                  {contactContent.enquiry.description}
                 </p>
               </div>
               <ContactFormClient />

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import type { Invention } from '@/lib/data/inventions'
+import { homeContent } from '@/content/home'
 
 const inventionLayouts = [
   'lg:col-span-7 lg:row-span-2 lg:min-h-[620px]',
@@ -21,7 +22,7 @@ export function HomeInventionsShowcase({ inventions }: { inventions: Invention[]
   if (inventions.length === 0) return null
 
   return (
-    <section data-section-label="Inventions" className="px-4 pb-24 md:px-5.5 md:pb-[110px]">
+    <section data-section-label={homeContent.inventions.sectionLabel} className="px-4 pb-24 md:px-5.5 md:pb-[110px]">
       <div className="relative mx-auto max-w-[1396px] overflow-hidden rounded-[20px] bg-[#07101c] px-5 py-14 text-white md:px-12 md:py-18 lg:px-[72px]">
         <div
           aria-hidden="true"
@@ -39,21 +40,20 @@ export function HomeInventionsShowcase({ inventions }: { inventions: Invention[]
         <div className="relative z-10 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div className="max-w-[760px]">
             <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#58a7ff]">
-              Ideas made tangible
+              {homeContent.inventions.eyebrow}
             </p>
             <h2 className="mt-4 text-[38px] font-bold leading-[1.04] tracking-[-0.04em] md:text-[58px]">
-              Our Inventions
+              {homeContent.inventions.title}
             </h2>
             <p className="mt-5 max-w-[680px] text-[16px] leading-8 text-[#9fabb9] md:text-[18px]">
-              Experiments, prototypes, and engineered objects that turn
-              curiosity into something people can see, touch, and test.
+              {homeContent.inventions.description}
             </p>
           </div>
           <Link
             href="/products"
             className="group inline-flex w-fit items-center gap-2 border-b border-[#536274] pb-2 text-sm font-semibold text-white transition-colors hover:border-[#58a7ff] hover:text-[#58a7ff]"
           >
-            Explore our work
+            {homeContent.inventions.action}
             <ArrowUpRight
               aria-hidden="true"
               size={17}
@@ -122,7 +122,7 @@ export function HomeInventionsShowcase({ inventions }: { inventions: Invention[]
 
               <div className="absolute inset-x-0 bottom-0 z-10 p-6 md:p-8">
                 <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#71b4ff]">
-                  Featured invention
+                  {homeContent.inventions.cardLabel}
                 </p>
                 <div className="mt-3 flex items-end justify-between gap-5">
                   <div className={isLead ? 'max-w-[590px]' : 'max-w-[520px]'}>
@@ -147,7 +147,7 @@ export function HomeInventionsShowcase({ inventions }: { inventions: Invention[]
 
               <Link
                 href={`/products?invention=${encodeURIComponent(invention.id)}`}
-                aria-label={`View ${invention.title}`}
+                aria-label={`${homeContent.inventions.viewPrefix} ${invention.title}`}
                 className="absolute inset-0 z-20 rounded-[20px] focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-[#58a7ff]"
               />
             </motion.article>

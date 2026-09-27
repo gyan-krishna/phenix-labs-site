@@ -9,14 +9,12 @@ import {
   getBreadcrumbSchema,
   getWebPageSchema,
 } from '@/lib/seo'
+import { aboutContent } from '@/content/about'
+import { sharedContent } from '@/content/shared'
 
 /** Public About route. The page intentionally stays empty when no CMS Markdown is published. */
 export const metadata: Metadata = generateMetadata({
-  title: 'About Our Engineering Lab',
-  description:
-    'Learn about Phenix Labs, our engineering mission, research-led approach, capabilities, and commitment to turning technical ideas into working solutions.',
-  keywords: ['about Phenix Labs', 'engineering lab India', 'engineering research and development'],
-  path: '/about',
+  ...aboutContent.metadata,
 })
 
 export default async function About() {
@@ -32,20 +30,19 @@ export default async function About() {
       <JsonLd
         data={[
           getWebPageSchema({
-            title: 'About Phenix Labs',
-            description:
-              'Our engineering mission, capabilities, and research-led approach to innovation.',
-            path: '/about',
+            title: aboutContent.metadata.schemaTitle,
+            description: aboutContent.metadata.schemaDescription,
+            path: aboutContent.metadata.path,
             type: 'AboutPage',
           }),
           getBreadcrumbSchema([
-            { name: 'Home', path: '/' },
-            { name: 'About', path: '/about' },
+            { name: sharedContent.breadcrumbs.home, path: '/' },
+            { name: aboutContent.metadata.breadcrumbLabel, path: aboutContent.metadata.path },
           ]),
         ]}
       />
       {markdown ? (
-        <section data-section-label="About Phenix Labs" className="bg-[#ecf1f5] px-5 py-16 md:px-8 md:py-24">
+        <section data-section-label={aboutContent.sectionLabel} className="bg-[#ecf1f5] px-5 py-16 md:px-8 md:py-24">
           <MarkdownContent content={markdown} />
         </section>
       ) : null}

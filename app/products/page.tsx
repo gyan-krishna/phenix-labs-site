@@ -14,19 +14,12 @@ import {
   getInventionCollectionSchema,
   getWebPageSchema,
 } from '@/lib/seo'
+import { productsContent } from '@/content/products'
+import { sharedContent } from '@/content/shared'
 
 /** Products route with paginated catalogue data and deep-linked invention details. */
 export const metadata: Metadata = generateMetadata({
-  title: 'Inventions, Prototypes & Engineered Products',
-  description:
-    'Explore inventions, research experiments, prototypes, and engineered products developed by Phenix Labs, ordered by their project dates.',
-  keywords: [
-    'Phenix Labs inventions',
-    'engineering prototypes',
-    'product development',
-    'technology experiments',
-  ],
-  path: '/products',
+  ...productsContent.metadata,
 })
 
 export default async function Products({
@@ -56,22 +49,21 @@ export default async function Products({
       <JsonLd
         data={[
           getWebPageSchema({
-            title: 'Inventions and Products',
-            description:
-              'A growing catalogue of inventions, prototypes, experiments, and engineered products.',
-            path: '/products',
+            title: productsContent.metadata.schemaTitle,
+            description: productsContent.metadata.schemaDescription,
+            path: productsContent.metadata.path,
             type: 'CollectionPage',
           }),
           getBreadcrumbSchema([
-            { name: 'Home', path: '/' },
-            { name: 'Products', path: '/products' },
+            { name: sharedContent.breadcrumbs.home, path: '/' },
+            { name: productsContent.metadata.breadcrumbLabel, path: productsContent.metadata.path },
           ]),
           getInventionCollectionSchema(initialPage.items),
         ]}
       />
       <div className="overflow-hidden bg-[#eaf0f4] text-[#08111f]">
         {/* Products hero and animated engineering orbit. */}
-        <section data-section-label="Products overview" className="relative overflow-hidden bg-[#081321] px-5 py-18 text-white md:py-24 lg:py-28">
+        <section data-section-label={productsContent.hero.sectionLabel} className="relative overflow-hidden bg-[#081321] px-5 py-18 text-white md:py-24 lg:py-28">
           <div aria-hidden="true" className="absolute -left-52 -top-56 size-[620px] rounded-full bg-[#0064d7]/25 blur-[130px]" />
           <div aria-hidden="true" className="absolute -bottom-56 right-[8%] size-[480px] rounded-full bg-[#46b6e4]/16 blur-[120px]" />
 
@@ -79,26 +71,22 @@ export default async function Products({
             <div>
               <p className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-[0.24em] text-[#65afff]">
                 <Sparkles aria-hidden="true" size={16} />
-                Ideas made tangible
+                {productsContent.hero.eyebrow}
               </p>
               <h1 className="mt-6 max-w-[820px] text-[48px] font-bold leading-[0.96] tracking-[-0.055em] sm:text-[62px] md:text-[78px]">
-                Inventions shaped through{' '}
+                {productsContent.hero.title}{' '}
                 <span className="bg-linear-to-r from-[#58a7ff] via-[#64d4ef] to-[#9aabff] bg-clip-text text-transparent">
-                  curiosity and engineering.
+                  {productsContent.hero.highlightedTitle}
                 </span>
               </h1>
               <p className="mt-7 max-w-[690px] text-[17px] leading-8 text-[#aebbc9] md:text-[19px]">
-                A growing archive of prototypes, experiments, and engineered
-                products—each one built to explore an idea, test a principle,
-                or solve a real-world problem.
+                {productsContent.hero.description}
               </p>
 
               <div className="mt-9 flex flex-wrap gap-3">
-                {[
-                  { icon: CircuitBoard, label: 'Engineered systems' },
-                  { icon: Boxes, label: 'Physical prototypes' },
-                  { icon: Atom, label: 'Research experiments' },
-                ].map(({ icon: Icon, label }) => (
+                {productsContent.hero.capabilities.map(({ key, label }) => {
+                  const Icon = key === 'systems' ? CircuitBoard : key === 'prototypes' ? Boxes : Atom
+                  return (
                   <span
                     key={label}
                     className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.045] px-4 py-2.5 text-sm font-medium text-[#c7d2de] backdrop-blur-sm"
@@ -106,7 +94,8 @@ export default async function Products({
                     <Icon aria-hidden="true" size={16} className="text-[#65afff]" />
                     {label}
                   </span>
-                ))}
+                  )
+                })}
               </div>
             </div>
 
@@ -127,14 +116,10 @@ export default async function Products({
                 <CircuitBoard aria-hidden="true" className="size-12" strokeWidth={1.4} />
               </div>
 
-              {[
-                { className: 'left-[3%] top-[43%]', number: '01', text: 'Observe' },
-                { className: 'right-[4%] top-[18%]', number: '02', text: 'Prototype' },
-                { className: 'bottom-[8%] right-[14%]', number: '03', text: 'Validate' },
-              ].map((item) => (
+              {productsContent.hero.orbitSteps.map((item, index) => (
                 <div
                   key={item.number}
-                  className={`absolute ${item.className} min-w-[132px] rounded-[18px] border border-white/10 bg-[#0c1c2e]/85 p-4 shadow-[0_18px_45px_rgba(0,0,0,0.2)] backdrop-blur-md`}
+                  className={`absolute ${['left-[3%] top-[43%]', 'right-[4%] top-[18%]', 'bottom-[8%] right-[14%]'][index]} min-w-[132px] rounded-[18px] border border-white/10 bg-[#0c1c2e]/85 p-4 shadow-[0_18px_45px_rgba(0,0,0,0.2)] backdrop-blur-md`}
                 >
                   <span className="text-[10px] font-bold tracking-[0.16em] text-[#5d91c8]">/ {item.number}</span>
                   <p className="mt-1.5 text-sm font-semibold text-white">{item.text}</p>
@@ -145,7 +130,7 @@ export default async function Products({
         </section>
 
         {/* Searchable, paginated invention collection. */}
-        <section data-section-label="Invention catalogue" className="relative px-5 py-16 md:py-24">
+        <section data-section-label={productsContent.catalogue.sectionLabel} className="relative px-5 py-16 md:py-24">
           <div
             aria-hidden="true"
             className="absolute inset-0 opacity-[0.2] [background-image:radial-gradient(rgba(56,91,123,.42)_1px,transparent_1.2px)] [background-size:26px_26px] [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_84%,transparent)]"
@@ -153,14 +138,13 @@ export default async function Products({
           <div className="relative mx-auto max-w-[1236px]">
             <div className="mb-10 max-w-[760px]">
               <p className="text-sm font-bold uppercase tracking-[0.22em] text-[#0064d7]">
-                The collection
+                {productsContent.catalogue.eyebrow}
               </p>
               <h2 className="mt-4 text-[38px] font-bold leading-[1.02] tracking-[-0.045em] text-[#101b2d] md:text-[56px]">
-                Explore what we have brought to life.
+                {productsContent.catalogue.title}
               </h2>
               <p className="mt-5 text-[16px] leading-8 text-[#586a7b] md:text-[18px]">
-                Search the archive or change its order. New published work
-                appears automatically from the admin panel.
+                {productsContent.catalogue.description}
               </p>
             </div>
 
