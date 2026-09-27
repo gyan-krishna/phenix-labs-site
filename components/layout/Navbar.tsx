@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { ArrowUpRight, MessageCircle, Menu, X } from 'lucide-react'
@@ -15,6 +14,7 @@ import {
 import type { NavbarData } from '@/types'
 import { cn } from '@/lib/utils'
 import { sharedContent } from '@/content/shared'
+import { ScrollResetLink } from '@/components/navigation/ScrollResetLink'
 
 interface NavbarProps {
   data: NavbarData
@@ -93,7 +93,7 @@ export function Navbar({ data }: NavbarProps) {
         />
         <div className="relative z-10 mx-auto flex h-full w-full max-w-[1260px] items-center justify-between px-4 sm:px-6">
           <div className="flex items-center">
-          <Link
+          <ScrollResetLink
             href={data.logo.href}
             className="flex shrink-0 items-center gap-2.5 rounded-[14px] pr-2 transition-opacity hover:opacity-80"
             aria-label={`${data.logo.text} home`}
@@ -114,7 +114,7 @@ export function Navbar({ data }: NavbarProps) {
                 {data.logo.text}
               </span>
             )}
-          </Link>
+          </ScrollResetLink>
           </div>
 
           <div
@@ -129,7 +129,7 @@ export function Navbar({ data }: NavbarProps) {
           {data.links.map((link) => {
             const isActive = isLinkActive(link.href)
             return (
-              <Link
+              <ScrollResetLink
                 key={link.href}
                 href={link.href}
                 aria-current={isActive ? 'page' : undefined}
@@ -143,14 +143,14 @@ export function Navbar({ data }: NavbarProps) {
                 )}
               >
                 {link.label}
-              </Link>
+              </ScrollResetLink>
             )
           })}
           </div>
 
           <div className="flex items-center gap-2">
           {data.contactCta && (
-            <Link
+            <ScrollResetLink
               href={data.contactCta.href}
               aria-current={isLinkActive(data.contactCta.href) ? 'page' : undefined}
               className={cn(
@@ -167,11 +167,11 @@ export function Navbar({ data }: NavbarProps) {
                 strokeWidth={1.9}
                 className="text-[#278bc2] transition-transform group-hover:-rotate-6 group-hover:scale-105"
               />
-            </Link>
+            </ScrollResetLink>
           )}
 
           {data.cta && (
-            <Link
+            <ScrollResetLink
               href={data.cta.href}
               target={data.cta.openInNewTab ? '_blank' : undefined}
               rel={data.cta.openInNewTab ? 'noopener noreferrer' : undefined}
@@ -183,7 +183,7 @@ export function Navbar({ data }: NavbarProps) {
                 size={16}
                 className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
               />
-            </Link>
+            </ScrollResetLink>
           )}
 
           <button
@@ -216,7 +216,7 @@ export function Navbar({ data }: NavbarProps) {
               {data.links.map((link) => {
                 const isActive = isLinkActive(link.href)
                 return (
-                  <Link
+                  <ScrollResetLink
                     key={link.href}
                     href={link.href}
                     onClick={closeMenu}
@@ -230,11 +230,11 @@ export function Navbar({ data }: NavbarProps) {
                   >
                     {link.label}
                     {isActive && <span className="size-2 rounded-full bg-[#0064d7]" />}
-                  </Link>
+                  </ScrollResetLink>
                 )
               })}
               {data.contactCta && (
-                <Link
+                <ScrollResetLink
                   href={data.contactCta.href}
                   onClick={closeMenu}
                   aria-current={isLinkActive(data.contactCta.href) ? 'page' : undefined}
@@ -247,10 +247,10 @@ export function Navbar({ data }: NavbarProps) {
                 >
                   {data.contactCta.text}
                   <MessageCircle aria-hidden="true" size={16} strokeWidth={1.9} className="text-[#278bc2]" />
-                </Link>
+                </ScrollResetLink>
               )}
               {data.cta && (
-                <Link
+                <ScrollResetLink
                   href={data.cta.href}
                   target={data.cta.openInNewTab ? '_blank' : undefined}
                   rel={data.cta.openInNewTab ? 'noopener noreferrer' : undefined}
@@ -259,7 +259,7 @@ export function Navbar({ data }: NavbarProps) {
                 >
                   {data.cta.text}
                   <ArrowUpRight aria-hidden="true" size={17} />
-                </Link>
+                </ScrollResetLink>
               )}
             </div>
           </motion.div>

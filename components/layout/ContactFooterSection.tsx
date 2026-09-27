@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import {
   AlarmClock,
   ArrowUpRight,
@@ -9,6 +8,7 @@ import {
 import { SocialBrandIcon } from '@/components/common/SocialBrandIcon'
 import type { ContactSettings } from '@/types'
 import { sharedContent } from '@/content/shared'
+import { ScrollResetLink } from '@/components/navigation/ScrollResetLink'
 
 /** Footer contact summary populated by the singleton Contact & Social document. */
 export function ContactFooterSection({ contact }: { contact: ContactSettings }) {
@@ -59,7 +59,7 @@ export function ContactFooterSection({ contact }: { contact: ContactSettings }) 
             <p className="max-w-[520px] text-[16px] leading-8 text-[#9aa8b9]">
               {sharedContent.footer.description}
             </p>
-            <Link
+            <ScrollResetLink
               href="/contact"
               className="group mt-7 inline-flex h-14 items-center gap-3 rounded-full bg-[#0c70df] px-7 font-semibold text-white shadow-[0_15px_38px_rgba(0,100,215,0.3)] transition-all hover:-translate-y-0.5 hover:bg-[#1680ef] hover:shadow-[0_18px_44px_rgba(0,100,215,0.38)]"
             >
@@ -69,7 +69,7 @@ export function ContactFooterSection({ contact }: { contact: ContactSettings }) 
                 size={18}
                 className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
               />
-            </Link>
+            </ScrollResetLink>
           </div>
         </div>
 
