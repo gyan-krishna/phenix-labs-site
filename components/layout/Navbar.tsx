@@ -14,6 +14,7 @@ import {
 } from 'framer-motion'
 import type { NavbarData } from '@/types'
 import { cn } from '@/lib/utils'
+import { sharedContent } from '@/content/shared'
 
 interface NavbarProps {
   data: NavbarData
@@ -61,7 +62,7 @@ export function Navbar({ data }: NavbarProps) {
   return (
     <nav
       className="sticky top-0 z-50 h-[82px] w-full bg-transparent"
-      aria-label="Primary navigation"
+      aria-label={sharedContent.navigation.primaryLabel}
     >
       <motion.div
         layout
@@ -188,7 +189,7 @@ export function Navbar({ data }: NavbarProps) {
           <button
             className="flex size-11 items-center justify-center rounded-[14px] border border-[#d9e2e9] bg-[#eef3f6] text-[#162236] transition-colors hover:border-[#b7c7d4] hover:text-[#0064d7] lg:hidden"
             onClick={() => setIsMenuOpen((prev) => !prev)}
-            aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-label={isMenuOpen ? sharedContent.navigation.closeMenuLabel : sharedContent.navigation.openMenuLabel}
             aria-expanded={isMenuOpen}
             aria-controls="mobile-navigation"
           >

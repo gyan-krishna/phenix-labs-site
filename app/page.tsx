@@ -8,21 +8,11 @@ import { getHomeTestimonials } from '@/lib/data/testimonials'
 import { getClients } from '@/lib/data/clients'
 import { getHomeServices } from '@/lib/data/services'
 import { getFeaturedInventions } from '@/lib/data/inventions'
+import { homeContent } from '@/content/home'
 
 /** Home route: composes independently cached CMS collections into one page model. */
 export const metadata: Metadata = generateMetadata({
-  title: 'Engineering, Prototyping & Embedded Systems',
-  description:
-    'Phenix Labs develops PCB, firmware, embedded systems, Edge AI, prototypes, and engineered products for industry, research, and academic partners.',
-  keywords: [
-    'engineering company India',
-    'embedded systems development',
-    'PCB design',
-    'firmware development',
-    'Edge AI development',
-    'engineering prototyping',
-  ],
-  path: '/',
+  ...homeContent.metadata,
 })
 
 export default async function Home() {
@@ -40,10 +30,9 @@ export default async function Home() {
     <MainLayout navbarData={navbar} footerData={footer}>
       <JsonLd
         data={getWebPageSchema({
-          title: 'Engineering, Prototyping & Embedded Systems',
-          description:
-            'Engineering services and research-led product development for industry and academic partners.',
-          path: '/',
+          title: homeContent.metadata.title,
+          description: homeContent.metadata.schemaDescription,
+          path: homeContent.metadata.path,
         })}
       />
       <HomePageContent

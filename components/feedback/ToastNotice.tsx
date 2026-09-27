@@ -3,6 +3,7 @@
 import { useEffect } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { CheckCircle2, CircleAlert, X } from 'lucide-react'
+import { sharedContent } from '@/content/shared'
 
 export interface ToastNoticeData {
   id: number
@@ -69,7 +70,7 @@ export function ToastNotice({
             <button
               type="button"
               onClick={onDismiss}
-              aria-label="Dismiss notification"
+              aria-label={sharedContent.feedback.dismissLabel}
               className="absolute right-3 top-3 flex size-8 items-center justify-center rounded-full text-[#8494a7] transition-colors hover:bg-white/[0.08] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#62aefc]"
             >
               <X aria-hidden="true" size={17} />

@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { FooterData, NavbarData, NavLink } from '@/types'
 import { ContactFooterSection } from './ContactFooterSection'
+import { sharedContent } from '@/content/shared'
 
 interface SiteFooterProps {
   data: FooterData
@@ -41,12 +42,12 @@ export function SiteFooter({ data, links, logo }: SiteFooterProps) {
                 {logo.text}
               </span>
               <span className="mt-0.5 block text-[11px] uppercase tracking-[0.14em] text-[#718095]">
-                Ideas into reality
+                {sharedContent.brand.tagline}
               </span>
             </span>
           </Link>
 
-          <nav aria-label="Footer navigation">
+          <nav aria-label={sharedContent.footer.navigationLabel}>
             <ul className="flex flex-wrap gap-x-2 gap-y-2 md:justify-center">
               {footerLinks.map((link) => (
                 <li key={`${link.label}-${link.href}`}>

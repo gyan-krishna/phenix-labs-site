@@ -25,6 +25,7 @@ import {
   CountryCallingCodeSelect,
   getCountryDisplayName,
 } from '@/components/forms/CountryCallingCodeSelect'
+import { contactContent } from '@/content/contact'
 
 // Must match the static blueprint so Netlify files submissions under one form.
 const NETLIFY_FORM_NAME = 'project-enquiry'
@@ -69,7 +70,7 @@ class ContactSubmissionError extends Error {}
  * Handles client-side validation and URL-encoded Netlify Forms submission.
  */
 export function ContactForm({
-  submitButtonText = 'Send Message',
+  submitButtonText = contactContent.form.defaultSubmitAction,
   className = '',
   showPhone = false,
   showCompany = false,
@@ -109,7 +110,7 @@ export function ContactForm({
   const phoneNationalLimit =
     phoneExample?.nationalNumber.length ||
     CONTACT_FIELD_LIMITS.phone - getCountryCallingCode(phoneCountry).length
-  const phonePlaceholder = phoneExample?.nationalNumber || 'Phone number'
+  const phonePlaceholder = phoneExample?.nationalNumber || contactContent.form.placeholders.phone
 
   const changePhoneCountry = useCallback(
     (country: CountryCode) => {
@@ -147,13 +148,13 @@ export function ContactForm({
             const countryName = getCountryDisplayName(phoneCountry)
             setError('phone', {
               type: 'validate',
-              message: `Enter a valid phone number for ${countryName}`,
+              message: contactContent.form.phoneFieldErrorTemplate.replace('{country}', countryName),
             })
             setNotice({
               id: Date.now(),
               type: 'error',
-              title: 'Check the phone number',
-              message: `The number does not appear valid for ${countryName}.`,
+              title: contactContent.form.phoneErrorTitle,
+              message: contactContent.form.phoneErrorTemplate.replace('{country}', countryName),
             })
             return
           }
@@ -186,18 +187,18 @@ export function ContactForm({
         if (!response.ok) {
           const message =
             response.status === 429
-              ? 'Too many messages were sent recently. Please wait a minute and try again.'
+              ? contactContent.form.rateLimitError
               : response.status === 400
-                ? 'Please review the form fields and try again.'
-                : 'Your message could not be sent. Please try again shortly.'
+                ? contactContent.form.validationError
+                : contactContent.form.submissionError
           throw new ContactSubmissionError(message)
         }
 
         setNotice({
           id: Date.now(),
           type: 'success',
-          title: 'Message sent successfully',
-          message: 'Thanks for reaching out. We will get back to you soon.',
+          title: contactContent.form.successTitle,
+          message: contactContent.form.successMessage,
         })
         reset()
       } catch (error) {
@@ -205,11 +206,11 @@ export function ContactForm({
         setNotice({
           id: Date.now(),
           type: 'error',
-          title: 'Message not sent',
+          title: contactContent.form.failureTitle,
           message:
             error instanceof ContactSubmissionError
               ? error.message
-              : 'Please try again or use the direct contact details on this page.',
+              : contactContent.form.failureMessage,
         })
       }
     },
@@ -267,7 +268,7 @@ export function ContactForm({
             className={`${labelClassName} flex items-center justify-between gap-3`}
           >
             <span>
-              Name <span className="text-red-500" aria-label="required">*</span>
+              {contactContent.form.labels.name} <span className="text-red-500" aria-label={contactContent.form.labels.required}>*</span>
             </span>
             <CharacterCount
               current={fieldValues.name?.length || 0}
@@ -279,7 +280,7 @@ export function ContactForm({
             type="text"
             minLength={2}
             maxLength={100}
-            placeholder="Your name"
+            placeholder={contactContent.form.placeholders.name}
             {...register('name')}
             className={fieldClassName}
             aria-describedby={errors.name ? `${idPrefix}-name-error` : undefined}
@@ -299,7 +300,7 @@ export function ContactForm({
             className={`${labelClassName} flex items-center justify-between gap-3`}
           >
             <span>
-              Email <span className="text-red-500" aria-label="required">*</span>
+              {contactContent.form.labels.email} <span className="text-red-500" aria-label={contactContent.form.labels.required}>*</span>
             </span>
             <CharacterCount
               current={fieldValues.email?.length || 0}
@@ -310,7 +311,7 @@ export function ContactForm({
             id={`${idPrefix}-email`}
             type="email"
             maxLength={255}
-            placeholder="your.email@example.com"
+            placeholder={contactContent.form.placeholders.email}
             {...register('email')}
             className={fieldClassName}
             aria-describedby={errors.email ? `${idPrefix}-email-error` : undefined}
@@ -330,7 +331,7 @@ export function ContactForm({
               htmlFor={`${idPrefix}-phone`}
               className={`${labelClassName} flex items-center justify-between gap-3`}
             >
-              <span>Phone</span>
+              <span>{contactContent.form.labels.phone}</span>
               <CharacterCount
                 current={fieldValues.phone?.length || 0}
                 maximum={phoneNationalLimit}
@@ -377,7 +378,7 @@ export function ContactForm({
               htmlFor={`${idPrefix}-company`}
               className={`${labelClassName} flex items-center justify-between gap-3`}
             >
-              <span>Company</span>
+              <span>{contactContent.form.labels.company}</span>
               <CharacterCount
                 current={fieldValues.company?.length || 0}
                 maximum={CONTACT_FIELD_LIMITS.company}
@@ -387,7 +388,7 @@ export function ContactForm({
               id={`${idPrefix}-company`}
               type="text"
               maxLength={100}
-              placeholder="Your company name"
+              placeholder={contactContent.form.placeholders.company}
               {...register('company')}
               className={fieldClassName}
               aria-describedby={errors.company ? `${idPrefix}-company-error` : undefined}
@@ -408,7 +409,7 @@ export function ContactForm({
             className={`${labelClassName} flex items-center justify-between gap-3`}
           >
             <span>
-              Subject <span className="text-red-500" aria-label="required">*</span>
+              {contactContent.form.labels.subject} <span className="text-red-500" aria-label={contactContent.form.labels.required}>*</span>
             </span>
             <CharacterCount
               current={fieldValues.subject?.length || 0}
@@ -420,7 +421,7 @@ export function ContactForm({
             type="text"
             minLength={5}
             maxLength={200}
-            placeholder="What is this about?"
+            placeholder={contactContent.form.placeholders.subject}
             {...register('subject')}
             className={fieldClassName}
             aria-describedby={errors.subject ? `${idPrefix}-subject-error` : undefined}
@@ -440,7 +441,7 @@ export function ContactForm({
             className={`${labelClassName} flex items-center justify-between gap-3`}
           >
             <span>
-              Message <span className="text-red-500" aria-label="required">*</span>
+              {contactContent.form.labels.message} <span className="text-red-500" aria-label={contactContent.form.labels.required}>*</span>
             </span>
             <CharacterCount
               current={fieldValues.message?.length || 0}
@@ -449,7 +450,7 @@ export function ContactForm({
           </label>
           <textarea
             id={`${idPrefix}-message`}
-            placeholder="Tell us more about your project..."
+            placeholder={contactContent.form.placeholders.message}
             rows={5}
             minLength={10}
             maxLength={5000}
@@ -476,7 +477,7 @@ export function ContactForm({
               disabled={isSubmitting}
             />
             <label htmlFor={`${idPrefix}-subscribe`} className="ml-2 text-sm text-gray-700">
-              Subscribe to our newsletter
+              {contactContent.form.labels.subscribe}
             </label>
           </div>
         )}
@@ -491,7 +492,7 @@ export function ContactForm({
           {isSubmitting ? (
             <>
               <LoaderCircle aria-hidden="true" className="animate-spin" size={18} />
-              Sending message
+              {contactContent.form.submittingAction}
             </>
           ) : (
             <>

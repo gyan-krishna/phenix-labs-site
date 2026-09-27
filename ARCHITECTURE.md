@@ -67,6 +67,7 @@ components/
 └── ui/                          Small UI primitives
 
 config/                          Safe contact fallbacks
+content/                         Typed page-wise and shared static copy
 lib/config/site.ts               Persistent navigation/footer configuration
 lib/data/                        GROQ queries and UI normalization
 lib/schemas/                     Form validation contracts
@@ -78,6 +79,23 @@ types/                           Shared UI data contracts
 ```
 
 ## 4. Rendering and data flow
+
+### Repository-managed page content
+
+Static editorial content is separated from rendering under `content/`. Each public route has a matching module for metadata, section labels, headings, descriptions, CTAs, ordered copy arrays, empty states, and interface messages. `content/shared.ts` owns wording reused by the global footer, navigation, social preview, and exceptional status pages.
+
+The modules are TypeScript constants rather than raw JSON. This preserves one editing location per page while giving components literal key inference and compile-time checks. Content arrays use stable string keys; presentation components translate those keys into icons or other visual elements so the content layer never imports React components.
+
+This layer is not a replacement for Sanity. The ownership boundary is:
+
+```text
+content/       Version-controlled editorial copy and UI wording
+lib/config/    Version-controlled navigation and site behavior
+lib/data/      Published Sanity content normalized for the UI
+components/    Layout, visuals, animation, accessibility, and interaction
+```
+
+Runtime protocol values—form field names, API parameters, DOM event keys, cache headers, and CSS/animation constants—remain next to the code that implements them. They are not editorial content and moving them would weaken the boundary.
 
 ### Initial page requests
 

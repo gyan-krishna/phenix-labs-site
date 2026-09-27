@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { contactContent } from '@/content/contact'
 
 /** Shared UI and validation limits for enquiry fields. */
 export const CONTACT_FIELD_LIMITS = {
@@ -15,37 +16,37 @@ export const CONTACT_FIELD_LIMITS = {
 export const contactFormSchema = z.object({
   name: z
     .string()
-    .min(2, 'Name must be at least 2 characters')
-    .max(CONTACT_FIELD_LIMITS.name, 'Name must not exceed 100 characters')
-    .regex(/^[a-zA-Z\s'-]+$/, 'Name can only contain letters, spaces, hyphens, and apostrophes'),
+    .min(2, contactContent.form.validation.nameMinimum)
+    .max(CONTACT_FIELD_LIMITS.name, contactContent.form.validation.nameMaximum)
+    .regex(/^[a-zA-Z\s'-]+$/, contactContent.form.validation.nameFormat),
   
   email: z
     .string()
-    .email('Please enter a valid email address')
-    .max(CONTACT_FIELD_LIMITS.email, 'Email must not exceed 255 characters'),
+    .email(contactContent.form.validation.emailFormat)
+    .max(CONTACT_FIELD_LIMITS.email, contactContent.form.validation.emailMaximum),
   
   subject: z
     .string()
-    .min(5, 'Subject must be at least 5 characters')
-    .max(CONTACT_FIELD_LIMITS.subject, 'Subject must not exceed 200 characters'),
+    .min(5, contactContent.form.validation.subjectMinimum)
+    .max(CONTACT_FIELD_LIMITS.subject, contactContent.form.validation.subjectMaximum),
   
   message: z
     .string()
-    .min(10, 'Message must be at least 10 characters')
-    .max(CONTACT_FIELD_LIMITS.message, 'Message must not exceed 5000 characters'),
+    .min(10, contactContent.form.validation.messageMinimum)
+    .max(CONTACT_FIELD_LIMITS.message, contactContent.form.validation.messageMaximum),
   
   phone: z
     .string()
-    .max(CONTACT_FIELD_LIMITS.phone, 'Phone number must not exceed 15 digits')
+    .max(CONTACT_FIELD_LIMITS.phone, contactContent.form.validation.phoneMaximum)
     .optional()
     .refine(
       (value) => !value || /^\d{4,15}$/.test(value),
-      'Phone number must contain digits only'
+      contactContent.form.validation.phoneFormat
     ),
   
   company: z
     .string()
-    .max(CONTACT_FIELD_LIMITS.company, 'Company name must not exceed 100 characters')
+    .max(CONTACT_FIELD_LIMITS.company, contactContent.form.validation.companyMaximum)
     .optional(),
 
   subscribe: z

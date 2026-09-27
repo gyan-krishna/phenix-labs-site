@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { ArrowUp, Check, ListTree, X } from 'lucide-react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { sharedContent } from '@/content/shared'
 
 interface PageSection {
   id: string
@@ -243,12 +244,12 @@ export function ScrollNavigator() {
             >
               <div className="flex items-center justify-between px-3 pb-2 pt-1.5">
                 <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#718296]">
-                  On this page
+                  {sharedContent.navigation.sectionsTitle}
                 </p>
                 <button
                   type="button"
                   onClick={() => setIsMenuOpen(false)}
-                  aria-label="Close section navigation"
+                  aria-label={sharedContent.navigation.closeSectionsLabel}
                   className="flex size-7 cursor-pointer items-center justify-center rounded-full text-[#7a8b9d] hover:bg-[#e7eef4] hover:text-[#21364b]"
                 >
                   <X aria-hidden="true" size={15} />
@@ -256,7 +257,7 @@ export function ScrollNavigator() {
               </div>
               <nav
                 ref={sectionListRef}
-                aria-label="Page sections"
+                aria-label={sharedContent.navigation.sectionsLabel}
                 className="max-h-[min(55vh,390px)] overflow-y-auto"
               >
                 <ul className="space-y-1">
@@ -295,7 +296,7 @@ export function ScrollNavigator() {
                 type="button"
                 onClick={() => setIsMenuOpen((open) => !open)}
                 onFocus={() => setIsMenuOpen(true)}
-                aria-label="Navigate page sections"
+                aria-label={sharedContent.navigation.openSectionsLabel}
                 aria-expanded={isMenuOpen}
                 className="flex size-11 cursor-pointer items-center justify-center rounded-full text-[#365069] transition-all hover:bg-[#e5f1fc] hover:text-[#0064d7] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1683e7]"
               >
@@ -305,7 +306,7 @@ export function ScrollNavigator() {
             <button
               type="button"
               onClick={scrollToTop}
-              aria-label="Back to top"
+              aria-label={sharedContent.navigation.backToTopLabel}
               className="flex size-11 cursor-pointer items-center justify-center rounded-full bg-[#0d65bd] text-white shadow-[0_8px_22px_rgba(0,100,215,0.25)] transition-all hover:-translate-y-0.5 hover:bg-[#0756a4] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1683e7]"
             >
               <ArrowUp aria-hidden="true" size={19} />

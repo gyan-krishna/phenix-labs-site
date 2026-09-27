@@ -22,7 +22,7 @@ export interface SEOMetadata {
   ogImage?: string
   ogType?: 'website' | 'article'
   twitterCard?: 'summary' | 'summary_large_image' | 'app' | 'player'
-  keywords?: string[]
+  keywords?: readonly string[]
   author?: string
   path?: string
   index?: boolean
@@ -55,7 +55,7 @@ export function generateMetadata(params: SEOMetadata = {}): Metadata {
   return {
     title: fullTitle,
     description,
-    keywords,
+    keywords: [...keywords],
     authors: [{ name: siteConfig.name }],
     creator: siteConfig.name,
     publisher: siteConfig.name,

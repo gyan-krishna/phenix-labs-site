@@ -34,6 +34,7 @@ import type {
   InventionsPage,
   InventionSort,
 } from '@/lib/data/inventions'
+import { productsContent } from '@/content/products'
 
 interface InventionsCatalogueProps {
   initialPage: InventionsPage
@@ -46,10 +47,10 @@ const sortOptions: Array<{
   label: string
   icon: typeof CalendarArrowDown
 }> = [
-  { value: 'latest', label: 'Newest invention date', icon: CalendarArrowDown },
-  { value: 'oldest', label: 'Oldest invention date', icon: CalendarArrowUp },
-  { value: 'title-asc', label: 'Title A–Z', icon: ArrowDownAZ },
-  { value: 'title-desc', label: 'Title Z–A', icon: ArrowUpAZ },
+  { value: 'latest', label: productsContent.catalogue.sortOptions.latest, icon: CalendarArrowDown },
+  { value: 'oldest', label: productsContent.catalogue.sortOptions.oldest, icon: CalendarArrowUp },
+  { value: 'title-asc', label: productsContent.catalogue.sortOptions['title-asc'], icon: ArrowDownAZ },
+  { value: 'title-desc', label: productsContent.catalogue.sortOptions['title-desc'], icon: ArrowUpAZ },
 ]
 
 function formatCreatedAt(date: string) {
@@ -73,9 +74,9 @@ function formatInventionPeriod(invention: Invention) {
   if (invention.startDate && invention.endDate) {
     return `${formatFullDate(invention.startDate)} – ${formatFullDate(invention.endDate)}`
   }
-  if (invention.startDate) return `Started ${formatFullDate(invention.startDate)}`
-  if (invention.endDate) return `Completed ${formatFullDate(invention.endDate)}`
-  return `Added ${formatFullDate(invention.createdAt)}`
+  if (invention.startDate) return `${productsContent.catalogue.dateLabels.started} ${formatFullDate(invention.startDate)}`
+  if (invention.endDate) return `${productsContent.catalogue.dateLabels.completed} ${formatFullDate(invention.endDate)}`
+  return `${productsContent.catalogue.dateLabels.added} ${formatFullDate(invention.createdAt)}`
 }
 
 /** Compact catalogue card with an image carousel independent from the detail dialog. */
@@ -150,7 +151,7 @@ function InventionCard({
           type="button"
           onClick={onOpen}
           className="absolute inset-0 z-10 cursor-pointer"
-          aria-label={`Open details for ${invention.title}`}
+          aria-label={`${productsContent.catalogue.openDetailsPrefix} ${invention.title}`}
         />
 
         <div className="pointer-events-none absolute right-4 top-4 z-20 flex size-10 translate-y-1 items-center justify-center rounded-full border border-white/75 bg-white/85 text-[#0c70df] opacity-0 shadow-sm backdrop-blur-md transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-hover:shadow-md">
@@ -162,7 +163,7 @@ function InventionCard({
             <button
               type="button"
               onClick={() => showImage(activeImageIndex - 1)}
-              aria-label={`Show previous image of ${invention.title}`}
+              aria-label={`${productsContent.catalogue.previousImagePrefix} ${invention.title}`}
               className="absolute left-3 top-1/2 z-30 flex size-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/75 bg-white/85 text-[#203348] shadow-sm backdrop-blur-md transition hover:bg-white sm:opacity-0 sm:group-hover:opacity-100"
             >
               <ChevronLeft aria-hidden="true" size={18} />
@@ -170,7 +171,7 @@ function InventionCard({
             <button
               type="button"
               onClick={() => showImage(activeImageIndex + 1)}
-              aria-label={`Show next image of ${invention.title}`}
+              aria-label={`${productsContent.catalogue.nextImagePrefix} ${invention.title}`}
               className="absolute right-3 top-1/2 z-30 flex size-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/75 bg-white/85 text-[#203348] shadow-sm backdrop-blur-md transition hover:bg-white sm:opacity-0 sm:group-hover:opacity-100"
             >
               <ChevronRight aria-hidden="true" size={18} />
@@ -181,7 +182,7 @@ function InventionCard({
                   key={`${image.url}-${imageIndex}`}
                   type="button"
                   onClick={() => showImage(imageIndex)}
-                  aria-label={`Show image ${imageIndex + 1} of ${invention.title}`}
+                  aria-label={`${productsContent.catalogue.showImagePrefix} ${imageIndex + 1} ${productsContent.catalogue.imageOfLabel} ${invention.title}`}
                   aria-current={imageIndex === activeImageIndex}
                   className={`rounded-full transition-all ${
                     imageIndex === activeImageIndex
@@ -199,11 +200,11 @@ function InventionCard({
         type="button"
         onClick={onOpen}
         className="flex flex-1 cursor-pointer flex-col p-5 text-left md:p-6"
-        aria-label={`Open details for ${invention.title}`}
+        aria-label={`${productsContent.catalogue.openDetailsPrefix} ${invention.title}`}
       >
         <div className="flex items-center justify-between gap-4">
           <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#0c70df]">
-            Invention {String(index + 1).padStart(2, '0')}
+            {productsContent.catalogue.cardEyebrow} {String(index + 1).padStart(2, '0')}
           </span>
           <span className="text-xs font-medium text-[#7a8997]">
             {formatCreatedAt(invention.effectiveDate)}
@@ -213,7 +214,7 @@ function InventionCard({
           {invention.title}
         </h2>
         <p className="mt-3 line-clamp-2 text-sm leading-6 text-[#667789] md:text-[15px]">
-          {invention.description || 'More information about this invention will be added soon.'}
+          {invention.description || productsContent.catalogue.cardFallback}
         </p>
       </button>
     </motion.article>
@@ -324,7 +325,7 @@ function InventionDetailGallery({ invention }: { invention: Invention }) {
         )}
 
         <span className="absolute left-4 top-4 z-20 rounded-full border border-white/75 bg-white/80 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-[#40566b] shadow-sm backdrop-blur-md sm:left-5 sm:top-5">
-          Visual record
+          {productsContent.catalogue.visualRecordLabel}
         </span>
 
         {/* Navigator mirrors the focused portion of the magnified desktop image. */}
@@ -339,7 +340,7 @@ function InventionDetailGallery({ invention }: { invention: Invention }) {
               />
             </div>
             <p className="mt-1.5 text-center text-[9px] font-bold uppercase tracking-[0.14em] text-[#53687a]">
-              Zoom navigator
+              {productsContent.catalogue.zoomNavigatorLabel}
             </p>
           </div>
         )}
@@ -349,7 +350,7 @@ function InventionDetailGallery({ invention }: { invention: Invention }) {
             <button
               type="button"
               onClick={() => showImage(activeImageIndex - 1)}
-              aria-label={`Show previous image of ${invention.title}`}
+              aria-label={`${productsContent.catalogue.previousImagePrefix} ${invention.title}`}
               className="absolute left-4 top-1/2 z-20 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/80 bg-white/85 text-[#203348] shadow-md backdrop-blur-md transition hover:bg-white lg:left-6"
             >
               <ChevronLeft aria-hidden="true" size={21} />
@@ -357,7 +358,7 @@ function InventionDetailGallery({ invention }: { invention: Invention }) {
             <button
               type="button"
               onClick={() => showImage(activeImageIndex + 1)}
-              aria-label={`Show next image of ${invention.title}`}
+              aria-label={`${productsContent.catalogue.nextImagePrefix} ${invention.title}`}
               className="absolute right-4 top-1/2 z-20 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/80 bg-white/85 text-[#203348] shadow-md backdrop-blur-md transition hover:bg-white lg:right-6"
             >
               <ChevronRight aria-hidden="true" size={21} />
@@ -380,7 +381,7 @@ function InventionDetailGallery({ invention }: { invention: Invention }) {
                   ref={imageIndex === activeImageIndex ? activeThumbnailRef : null}
                   type="button"
                   onClick={() => showImage(imageIndex)}
-                  aria-label={`Show image ${imageIndex + 1} of ${invention.title}`}
+                  aria-label={`${productsContent.catalogue.showImagePrefix} ${imageIndex + 1} ${productsContent.catalogue.imageOfLabel} ${invention.title}`}
                   aria-current={imageIndex === activeImageIndex}
                   className={`relative size-12 shrink-0 snap-center overflow-hidden rounded-[10px] border-2 transition sm:size-14 ${
                     imageIndex === activeImageIndex
@@ -472,7 +473,7 @@ export function InventionsCatalogue({
       setTotal(page.total)
       setActiveSearch(search)
     } catch {
-      setError('The invention collection could not be updated. Please try again.')
+      setError(productsContent.catalogue.updateError)
     } finally {
       setIsRefreshing(false)
     }
@@ -510,7 +511,7 @@ export function InventionsCatalogue({
       setNextCursor(page.nextCursor)
       setTotal(page.total)
     } catch {
-      setError('More inventions could not be loaded. Please try again.')
+      setError(productsContent.catalogue.loadError)
     } finally {
       setIsLoadingMore(false)
     }
@@ -559,15 +560,15 @@ export function InventionsCatalogue({
               type="search"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search inventions"
-              aria-label="Search inventions"
+              placeholder={productsContent.catalogue.searchPlaceholder}
+              aria-label={productsContent.catalogue.searchLabel}
               className="h-13 min-w-0 flex-1 rounded-full border border-[#d2dce4] bg-[#f4f7f9] pl-12 pr-12 text-sm text-[#162236] outline-none transition focus:border-[#4f98df] focus:bg-white focus:ring-4 focus:ring-[#0064d7]/8"
             />
             {query && (
               <button
                 type="button"
                 onClick={clearSearch}
-                aria-label="Clear invention search"
+                aria-label={productsContent.catalogue.clearSearchLabel}
                 className="absolute right-3 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-full text-[#718091] transition hover:bg-[#e5ebf0] hover:text-[#162236]"
               >
                 <X aria-hidden="true" size={16} />
@@ -583,7 +584,7 @@ export function InventionsCatalogue({
               className="inline-flex h-13 items-center justify-center gap-2 rounded-full bg-[#0c70df] px-6 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#075fbe] disabled:cursor-wait disabled:opacity-65 lg:hidden"
             >
               {isRefreshing && <LoaderCircle aria-hidden="true" size={17} className="animate-spin" />}
-              Search
+              {productsContent.catalogue.searchAction}
             </button>
 
             <label className="relative flex h-13 min-w-[190px] items-center rounded-full border border-[#d2dce4] bg-[#f4f7f9] px-4">
@@ -591,7 +592,7 @@ export function InventionsCatalogue({
                 const SortIcon = sortOptions.find((option) => option.value === sort)?.icon || CalendarArrowDown
                 return <SortIcon aria-hidden="true" size={18} className="shrink-0 text-[#0064d7]" />
               })()}
-              <span className="sr-only">Sort inventions</span>
+              <span className="sr-only">{productsContent.catalogue.sortLabel}</span>
               <select
                 value={sort}
                 onChange={(event) => handleSort(event.target.value as InventionSort)}
@@ -615,7 +616,7 @@ export function InventionsCatalogue({
               className="hidden h-13 items-center justify-center gap-2 rounded-full bg-[#0c70df] px-6 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#075fbe] disabled:cursor-wait disabled:opacity-65 lg:inline-flex"
             >
               {isRefreshing && <LoaderCircle aria-hidden="true" size={17} className="animate-spin" />}
-              Search
+              {productsContent.catalogue.searchAction}
             </button>
           </div>
         </div>
@@ -624,11 +625,11 @@ export function InventionsCatalogue({
       <div className="mt-7 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm font-medium text-[#5d6d7e]" aria-live="polite">
           {isRefreshing
-            ? 'Updating collection…'
-            : `${total} invention${total === 1 ? '' : 's'}${activeSearch ? ` matching “${activeSearch}”` : ''}`}
+            ? productsContent.catalogue.updating
+            : `${total} ${total === 1 ? productsContent.catalogue.resultNoun : productsContent.catalogue.resultNounPlural}${activeSearch ? ` ${productsContent.catalogue.matchingLabel} “${activeSearch}”` : ''}`}
         </p>
         <p className="text-xs uppercase tracking-[0.14em] text-[#83909d]">
-          Showing {inventions.length} of {total}
+          {productsContent.catalogue.showingLabel} {inventions.length} {productsContent.catalogue.ofLabel} {total}
         </p>
       </div>
 
@@ -654,12 +655,12 @@ export function InventionsCatalogue({
         <div className="mt-8 rounded-[20px] border border-[#c7d4df] bg-white px-6 py-20 text-center">
           <Sparkles aria-hidden="true" size={42} className="mx-auto text-[#0064d7]" />
           <h2 className="mt-5 text-2xl font-bold text-[#162236]">
-            {activeSearch ? 'No inventions match that search' : 'The invention archive is taking shape'}
+            {activeSearch ? productsContent.catalogue.noSearchTitle : productsContent.catalogue.emptyTitle}
           </h2>
           <p className="mx-auto mt-3 max-w-[520px] text-[#617080]">
             {activeSearch
-              ? 'Try a broader phrase or clear the current search.'
-              : 'Published inventions will appear here as they are added in the admin panel.'}
+              ? productsContent.catalogue.noSearchDescription
+              : productsContent.catalogue.emptyDescription}
           </p>
           {activeSearch && (
             <button
@@ -667,7 +668,7 @@ export function InventionsCatalogue({
               onClick={clearSearch}
               className="mt-7 inline-flex h-12 items-center rounded-full bg-[#0064d7] px-6 text-sm font-semibold text-white"
             >
-              Clear search
+              {productsContent.catalogue.clearSearchAction}
             </button>
           )}
         </div>
@@ -683,11 +684,11 @@ export function InventionsCatalogue({
               className="inline-flex h-13 min-w-[210px] items-center justify-center gap-2 rounded-full border border-[#9eb7cc] bg-white px-7 font-semibold text-[#24364a] shadow-[0_10px_30px_rgba(22,34,54,0.07)] transition hover:-translate-y-0.5 hover:border-[#0064d7]/55 hover:text-[#0064d7] disabled:cursor-wait disabled:opacity-65"
             >
               {isLoadingMore && <LoaderCircle aria-hidden="true" size={19} className="animate-spin" />}
-              {isLoadingMore ? 'Loading inventions' : 'Load more inventions'}
+              {isLoadingMore ? productsContent.catalogue.loadingMore : productsContent.catalogue.loadMore}
             </button>
           ) : (
             <p className="text-sm font-medium text-[#687789]">
-              You’ve reached the end of the invention collection.
+              {productsContent.catalogue.end}
             </p>
           )}
         </div>
@@ -714,17 +715,17 @@ export function InventionsCatalogue({
                 <div className="flex items-center gap-2">
                   <div className="mr-2 hidden sm:block">
                     <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-[#7b8997]">
-                      Product workspace
+                      {productsContent.catalogue.workspaceEyebrow}
                     </p>
                     <p className="mt-0.5 text-xs font-semibold text-[#263b4e]">
-                      Invention detail
+                      {productsContent.catalogue.workspaceTitle}
                     </p>
                   </div>
                   <button
                     type="button"
                     onClick={() => showAdjacentInvention(-1)}
                     disabled={selectedIndex <= 0}
-                    aria-label="Show previous invention"
+                    aria-label={productsContent.catalogue.previousLabel}
                     className="flex size-10 items-center justify-center rounded-[13px] border border-[#d0dae2] bg-white text-[#33485c] transition hover:border-[#8eb0cb] hover:text-[#0c70df] disabled:cursor-not-allowed disabled:opacity-35"
                   >
                     <ChevronLeft aria-hidden="true" size={19} />
@@ -733,7 +734,7 @@ export function InventionsCatalogue({
                     type="button"
                     onClick={() => showAdjacentInvention(1)}
                     disabled={selectedIndex < 0 || selectedIndex >= inventions.length - 1}
-                    aria-label="Show next invention"
+                    aria-label={productsContent.catalogue.nextLabel}
                     className="flex size-10 items-center justify-center rounded-[13px] border border-[#d0dae2] bg-white text-[#33485c] transition hover:border-[#8eb0cb] hover:text-[#0c70df] disabled:cursor-not-allowed disabled:opacity-35"
                   >
                     <ChevronRight aria-hidden="true" size={19} />
@@ -741,14 +742,14 @@ export function InventionsCatalogue({
                   <span className="ml-1 hidden text-xs font-semibold tabular-nums text-[#758493] md:block">
                     {selectedIndex >= 0
                       ? `${selectedIndex + 1} of ${inventions.length}`
-                      : 'Featured invention'}
+                      : productsContent.catalogue.featuredLabel}
                   </span>
                 </div>
 
                 <button
                   type="button"
                   onClick={closeInvention}
-                  aria-label="Close invention details"
+                  aria-label={productsContent.catalogue.closeLabel}
                   className="flex size-10 items-center justify-center rounded-[13px] bg-[#e7edf2] text-[#24384b] transition hover:bg-[#d9e4eb]"
                 >
                   <X aria-hidden="true" size={20} />
@@ -764,7 +765,7 @@ export function InventionsCatalogue({
                 <div className="p-6 sm:p-9 sm:pb-12 lg:overflow-y-auto lg:p-10 xl:p-14">
                   <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
                     <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#0c70df]">
-                      Invention details
+                      {productsContent.catalogue.detailsEyebrow}
                     </p>
                     <span className="inline-flex items-center gap-2 text-xs font-semibold text-[#778696]">
                       <CalendarDays aria-hidden="true" size={15} />
@@ -778,10 +779,10 @@ export function InventionsCatalogue({
                   <div className="relative mt-9 border-t border-[#d3dde5] pt-8 sm:pl-7">
                     <span aria-hidden="true" className="absolute bottom-0 left-0 top-8 hidden w-[3px] rounded-full bg-linear-to-b from-[#0c70df] via-[#55a9df] to-transparent sm:block" />
                     <h3 className="text-xs font-bold uppercase tracking-[0.17em] text-[#405468]">
-                      About this invention
+                      {productsContent.catalogue.aboutTitle}
                     </h3>
                     <p className="mt-4 whitespace-pre-line text-[16px] leading-8 text-[#516476]">
-                      {selectedInvention.description || 'Additional product details will be added soon.'}
+                      {selectedInvention.description || productsContent.catalogue.detailFallback}
                     </p>
                   </div>
                 </div>

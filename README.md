@@ -89,6 +89,25 @@ The Studio exposes these document types:
 
 CMS reads are normalized in `lib/data/` before reaching presentation components. Published changes are cached for up to 60 seconds, so an edit may not appear immediately after publishing.
 
+### Static page content
+
+Editorial copy that is intentionally kept in the repository is centralized under `content/`:
+
+```text
+content/
+├── about.ts
+├── contact.ts
+├── home.ts
+├── products.ts
+├── services.ts
+├── shared.ts
+└── testimonials.ts
+```
+
+Use the matching page file to change metadata, section labels, headings, descriptions, CTA labels, ordered static lists, empty states, and other interface copy. `shared.ts` contains footer, navigation, social-preview, and status-page wording used across routes. These are typed TypeScript objects rather than JSON so keys, ordered values, and component usage are checked during development.
+
+Do not move Sanity-authored records into these files. Services, inventions, testimonials, clients, About Markdown, and contact/social details continue to come from `lib/data/`. Components should retain styling, icons, animation, accessibility behavior, and runtime logic rather than embedding editable page copy.
+
 ### Studio deployment setup
 
 For `/admin` to reach the login/editor screen in a deployed environment, register the deployed Studio URL with the Sanity project and add the site origin to Sanity CORS. The Studio may show “Connect this Studio to your project” until that URL has been registered. Repeat the CORS step for local development and any preview origin that editors are expected to use.
@@ -143,6 +162,7 @@ The Next.js application and Sanity Studio can run on Vercel, and production buil
 app/                 Routes, metadata, APIs, error pages, and Studio mount
 components/          Layout, sections, forms, feedback, navigation, and animation
 config/              Safe application defaults
+content/             Typed page-wise and shared static editorial content
 lib/config/          Persistent site navigation and footer configuration
 lib/data/            Typed Sanity queries and normalization
 lib/schemas/         Runtime form validation
@@ -158,6 +178,7 @@ For detailed boundaries and data flows, see [ARCHITECTURE.md](./ARCHITECTURE.md)
 
 - Prefer Server Components; use client components only for state, browser APIs, or animation.
 - Fetch CMS content in `lib/data/`, normalize it there, and pass plain typed props into the UI.
+- Put repository-managed editorial copy in the relevant `content/<page>.ts` module, not inside JSX.
 - Keep shared chrome inside `MainLayout` so every public route receives one navbar and one footer.
 - Preserve empty-state behavior: unavailable collections render no fabricated records.
 - Add meaningful comments around non-obvious behavior, not line-by-line narration.

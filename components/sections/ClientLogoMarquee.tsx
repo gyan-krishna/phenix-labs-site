@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import type { ClientLogo } from '@/lib/data/clients'
+import { homeContent } from '@/content/home'
 
 interface ClientLogoMarqueeProps {
   clients: ClientLogo[]
@@ -39,15 +40,14 @@ export function ClientLogoMarquee({ clients }: ClientLogoMarqueeProps) {
   )
 
   return (
-    <section data-section-label="Clients" className="relative overflow-hidden py-7 md:py-9" aria-labelledby="client-logo-title">
+    <section data-section-label={homeContent.clients.sectionLabel} className="relative overflow-hidden py-7 md:py-9" aria-labelledby="client-logo-title">
       <div aria-hidden="true" className="absolute inset-0 opacity-[0.08] [background-image:radial-gradient(rgba(0,100,215,.65)_1px,transparent_1.2px)] [background-size:24px_24px]" />
       <div className="relative z-10 mb-7 px-4 md:mb-8 md:px-6.75">
         <div className="mx-auto flex max-w-[1396px] flex-col gap-2 px-6 md:flex-row md:items-end md:justify-center md:px-10">
           <div className="text-center">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0064d7]">Selected collaborations</p>
-            <h2 id="client-logo-title" className="mt-2 text-[25px] font-bold tracking-[-0.03em] text-[#162236] md:text-[32px]">Trusted by teams that build boldly.</h2>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0064d7]">{homeContent.clients.eyebrow}</p>
+            <h2 id="client-logo-title" className="mt-2 text-[25px] font-bold tracking-[-0.03em] text-[#162236] md:text-[32px]">{homeContent.clients.title}</h2>
           </div>
-          {/* <p className="text-sm text-[#687889]">Hover to pause and explore.</p> */}
         </div>
       </div>
 

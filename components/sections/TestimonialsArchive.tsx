@@ -7,6 +7,7 @@ import type {
   Testimonial,
   TestimonialsPage,
 } from '@/lib/data/testimonials'
+import { testimonialsContent } from '@/content/testimonials'
 
 interface TestimonialsArchiveProps {
   initialPage: TestimonialsPage
@@ -49,7 +50,7 @@ function TestimonialCard({
         />
         <span
           className="flex items-center gap-1 text-sm font-semibold tabular-nums text-[#162236]"
-          aria-label={`${testimonial.rating} out of 5 stars`}
+          aria-label={`${testimonial.rating} ${testimonialsContent.archive.ratingSuffix}`}
         >
           {testimonial.rating.toFixed(1)}
           <Star
@@ -114,7 +115,7 @@ export function TestimonialsArchive({
       setTestimonials((current) => [...current, ...page.items])
       setNextCursor(page.nextCursor)
     } catch {
-      setError('More client stories could not be loaded. Please try again.')
+      setError(testimonialsContent.archive.loadError)
     } finally {
       setIsLoading(false)
     }
@@ -129,11 +130,10 @@ export function TestimonialsArchive({
           size={42}
         />
         <h2 className="mt-5 text-2xl font-bold text-[#162236]">
-          More client stories are coming soon
+          {testimonialsContent.archive.emptyTitle}
         </h2>
         <p className="mt-3 text-[#617080]">
-          Published testimonials will appear here as soon as they are added in
-          the admin panel.
+          {testimonialsContent.archive.emptyDescription}
         </p>
       </div>
     )
@@ -142,7 +142,7 @@ export function TestimonialsArchive({
   return (
     <div>
       <p className="mb-7 text-sm font-medium text-[#617080]" aria-live="polite">
-        Showing {testimonials.length} client stories
+        {testimonialsContent.archive.showingPrefix} {testimonials.length} {testimonialsContent.archive.showingSuffix}
       </p>
 
       <div className="columns-1 gap-5 md:columns-2 xl:columns-3">
@@ -167,11 +167,11 @@ export function TestimonialsArchive({
             {isLoading && (
               <LoaderCircle aria-hidden="true" className="animate-spin" size={19} />
             )}
-            {isLoading ? 'Loading stories' : 'Load more stories'}
+            {isLoading ? testimonialsContent.archive.loading : testimonialsContent.archive.loadMore}
           </button>
         ) : (
           <p className="text-sm font-medium text-[#617080]">
-            You’ve reached the end of the collection.
+            {testimonialsContent.archive.end}
           </p>
         )}
       </div>

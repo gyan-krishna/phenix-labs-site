@@ -20,6 +20,7 @@ import {
   X,
 } from 'lucide-react'
 import type { Testimonial } from '@/lib/data/testimonials'
+import { homeContent } from '@/content/home'
 
 interface HomeTestimonialsProps {
   testimonials: Testimonial[]
@@ -146,18 +147,17 @@ export function HomeTestimonials({ testimonials }: HomeTestimonialsProps) {
   const preview = getTestimonialPreview(testimonial.quote)
 
   return (
-    <section data-section-label="Testimonials" className="bg-[#e0e8ef] px-5 py-20 md:py-[96px]">
+    <section data-section-label={homeContent.testimonials.sectionLabel} className="bg-[#e0e8ef] px-5 py-20 md:py-[96px]">
       <div className="mx-auto grid max-w-[1236px] items-center gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:gap-20">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#0064d7]">
-            Client stories
+            {homeContent.testimonials.eyebrow}
           </p>
           <h2 className="mt-4 text-[36px] font-bold leading-[1.05] tracking-[-0.035em] text-black md:text-[52px]">
-            What Our Clients Say About Us
+            {homeContent.testimonials.title}
           </h2>
           <p className="mt-6 max-w-[520px] text-[17px] leading-8 text-[#4e4e4e]">
-            Real experiences from the people who trusted us to turn complex
-            ideas into useful products.
+            {homeContent.testimonials.description}
           </p>
 
           <div className="mt-9 flex items-center gap-3">
@@ -165,7 +165,7 @@ export function HomeTestimonials({ testimonials }: HomeTestimonialsProps) {
               type="button"
               onClick={() => navigate(-1)}
               disabled={!canNavigate}
-              aria-label="Show previous testimonial"
+              aria-label={homeContent.testimonials.previousLabel}
               className="flex size-12 items-center justify-center rounded-full border border-[#9eafbe] bg-white text-[#162236] transition hover:-translate-y-0.5 hover:border-[#0064d7] hover:text-[#0064d7] disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ChevronUp aria-hidden="true" size={21} />
@@ -174,7 +174,7 @@ export function HomeTestimonials({ testimonials }: HomeTestimonialsProps) {
               type="button"
               onClick={() => navigate(1)}
               disabled={!canNavigate}
-              aria-label="Show next testimonial"
+              aria-label={homeContent.testimonials.nextLabel}
               className="flex size-12 items-center justify-center rounded-full border border-[#9eafbe] bg-white text-[#162236] transition hover:translate-y-0.5 hover:border-[#0064d7] hover:text-[#0064d7] disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ChevronDown aria-hidden="true" size={21} />
@@ -185,8 +185,8 @@ export function HomeTestimonials({ testimonials }: HomeTestimonialsProps) {
               disabled={!canNavigate || Boolean(shouldReduceMotion)}
               aria-label={
                 isManuallyPaused
-                  ? 'Resume automatic testimonial rotation'
-                  : 'Pause automatic testimonial rotation'
+                  ? homeContent.testimonials.resumeLabel
+                  : homeContent.testimonials.pauseLabel
               }
               aria-pressed={isManuallyPaused}
               className="ml-1 flex h-12 items-center gap-2 rounded-full border border-[#9eafbe] bg-transparent px-5 text-sm font-semibold text-[#162236] transition hover:border-[#0064d7] hover:text-[#0064d7] disabled:cursor-not-allowed disabled:opacity-40"
@@ -196,14 +196,14 @@ export function HomeTestimonials({ testimonials }: HomeTestimonialsProps) {
               ) : (
                 <Pause aria-hidden="true" size={17} fill="currentColor" />
               )}
-              {isManuallyPaused ? 'Play' : 'Pause'}
+              {isManuallyPaused ? homeContent.testimonials.play : homeContent.testimonials.pause}
             </button>
           </div>
           <Link
             href="/testimonials"
             className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[#0064d7] transition-colors hover:text-[#004da7]"
           >
-            Explore more client stories
+            {homeContent.testimonials.archiveAction}
             <ArrowUpRight aria-hidden="true" size={17} />
           </Link>
         </div>
@@ -211,7 +211,7 @@ export function HomeTestimonials({ testimonials }: HomeTestimonialsProps) {
         <div
           role="region"
           aria-roledescription="carousel"
-          aria-label="Client testimonials"
+          aria-label={homeContent.testimonials.carouselLabel}
           tabIndex={0}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
@@ -256,7 +256,7 @@ export function HomeTestimonials({ testimonials }: HomeTestimonialsProps) {
                 dragElastic={0.12}
                 onDragEnd={handleDragEnd}
                 className="flex h-full cursor-grab touch-pan-x select-none flex-col p-7 active:cursor-grabbing sm:p-10 lg:p-12"
-                aria-label={`Testimonial ${activeIndex + 1} of ${testimonials.length}`}
+                aria-label={`${homeContent.testimonials.itemLabel} ${activeIndex + 1} of ${testimonials.length}`}
               >
                 <div className="flex items-start justify-between gap-5">
                   <Quote
@@ -300,7 +300,7 @@ export function HomeTestimonials({ testimonials }: HomeTestimonialsProps) {
                         onClick={() => setIsFullTestimonialOpen(true)}
                         className="font-bold text-[#0064d7] underline decoration-[#0064d7]/30 underline-offset-4 transition-colors hover:text-[#004da7]"
                       >
-                        Read more
+                        {homeContent.testimonials.readMore}
                       </button>
                     </>
                   ) : (
@@ -331,7 +331,7 @@ export function HomeTestimonials({ testimonials }: HomeTestimonialsProps) {
           </div>
 
           {canNavigate && (
-            <div className="mt-8 flex justify-center gap-2" aria-label="Choose a testimonial">
+            <div className="mt-8 flex justify-center gap-2" aria-label={homeContent.testimonials.chooserLabel}>
               {testimonials.map((item, index) => (
                 <button
                   key={item.id}
@@ -340,7 +340,7 @@ export function HomeTestimonials({ testimonials }: HomeTestimonialsProps) {
                     setDirection(index > activeIndex ? 1 : -1)
                     setActiveIndex(index)
                   }}
-                  aria-label={`Show testimonial ${index + 1}`}
+                  aria-label={`${homeContent.testimonials.showItemLabel} ${index + 1}`}
                   aria-current={index === activeIndex}
                   className={`h-2 rounded-full transition-all duration-300 ${
                     index === activeIndex
@@ -370,7 +370,7 @@ export function HomeTestimonials({ testimonials }: HomeTestimonialsProps) {
               <div className="flex items-start justify-between gap-6">
                 <div>
                   <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#0064d7]">
-                    Client testimonial
+                    {homeContent.testimonials.modalEyebrow}
                   </p>
                   <DialogTitle className="mt-2 text-2xl font-bold text-[#162236]">
                     {testimonial.author}
@@ -386,7 +386,7 @@ export function HomeTestimonials({ testimonials }: HomeTestimonialsProps) {
                 <button
                   type="button"
                   onClick={closeFullTestimonial}
-                  aria-label="Close full testimonial"
+                  aria-label={homeContent.testimonials.closeLabel}
                   className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#edf2f6] text-[#162236] transition-colors hover:bg-[#dce5ec]"
                 >
                   <X aria-hidden="true" size={21} />
@@ -404,7 +404,7 @@ export function HomeTestimonials({ testimonials }: HomeTestimonialsProps) {
                 <p className="mt-5 text-[19px] leading-8 text-[#334155]">
                   “{testimonial.quote}”
                 </p>
-                <div className="mt-7 flex items-center gap-1" aria-label={`${testimonial.rating} out of 5 stars`}>
+                <div className="mt-7 flex items-center gap-1" aria-label={`${testimonial.rating} ${homeContent.testimonials.ratingSuffix}`}>
                   {Array.from({ length: 5 }, (_, index) => (
                     <Star
                       key={index}
