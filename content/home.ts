@@ -1,7 +1,7 @@
 /** Static Home page copy. Sanity-backed collections remain in `lib/data`. */
 export const homeContent = {
   metadata: {
-    title: 'Engineering, Prototyping & Embedded Systems',
+    title: 'Phenix Labs - Engineering, Prototyping & Embedded Systems',
     description:
       'Phenix Labs develops PCB, firmware, embedded systems, Edge AI, prototypes, and engineered products for industry, research, and academic partners.',
     keywords: [
