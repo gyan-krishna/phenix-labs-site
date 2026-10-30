@@ -194,6 +194,34 @@ export function getServiceSchema(params: {
   }
 }
 
+/** JobPosting schema is emitted only for roles currently open to applications. */
+export function getJobPostingSchema(params: {
+  title: string
+  description: string
+  path: string
+  employmentType: string
+  workplaceType: string
+  location: string
+  datePosted?: string | null
+  validThrough?: string | null
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'JobPosting',
+    title: params.title,
+    description: params.description,
+    url: absoluteUrl(params.path),
+    employmentType: params.employmentType,
+    jobLocationType: params.workplaceType === 'Remote' ? 'TELECOMMUTE' : undefined,
+    ...(params.workplaceType !== 'Remote' && {
+      jobLocation: { '@type': 'Place', address: { '@type': 'PostalAddress', addressLocality: params.location, addressCountry: 'IN' } },
+    }),
+    ...(params.datePosted && { datePosted: params.datePosted }),
+    ...(params.validThrough && { validThrough: params.validThrough }),
+    hiringOrganization: { '@id': `${siteConfig.url}/#organization` },
+  }
+}
+
 /** Catalogue schema describes inventions as creative engineering work, not retail offers. */
 export function getInventionCollectionSchema(
   inventions: Array<{

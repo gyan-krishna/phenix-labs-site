@@ -7,6 +7,8 @@ export interface NavLink {
   label: string
   href: string
   isActive?: boolean
+  /** Keeps a destination available in shared data while omitting it from the primary nav. */
+  showInNavbar?: boolean
   showInFooter?: boolean
 }
 

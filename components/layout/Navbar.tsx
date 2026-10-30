@@ -58,6 +58,7 @@ export function Navbar({ data }: NavbarProps) {
   const isHomePage = pathname === '/'
   const isLinkActive = (href: string) =>
     pathname === href || (href !== '/' && pathname.startsWith(`${href}/`))
+  const primaryLinks = data.links.filter((link) => link.showInNavbar !== false)
 
   return (
     <nav
@@ -126,7 +127,7 @@ export function Navbar({ data }: NavbarProps) {
                 : 'border-transparent bg-transparent'
             }`}
           >
-          {data.links.map((link) => {
+          {primaryLinks.map((link) => {
             const isActive = isLinkActive(link.href)
             return (
               <ScrollResetLink
@@ -213,7 +214,7 @@ export function Navbar({ data }: NavbarProps) {
             } ${isScrolled ? 'top-[78px]' : 'top-[84px]'}`}
           >
             <div className="flex flex-col gap-1">
-              {data.links.map((link) => {
+              {primaryLinks.map((link) => {
                 const isActive = isLinkActive(link.href)
                 return (
                   <ScrollResetLink

@@ -5,7 +5,7 @@ import { getContactSettings } from '@/lib/data/contact'
 /**
  * Persistent site-wide navigation configuration.
  *
- * `showInFooter` controls whether a navbar item also appears in the footer.
+ * Visibility flags let one source configure primary and footer navigation independently.
  */
 export const navbarData: NavbarData = {
   logo: {
@@ -19,6 +19,7 @@ export const navbarData: NavbarData = {
     { label: 'Services', href: '/services', showInFooter: true },
     { label: 'Products', href: '/products', showInFooter: true },
     { label: 'Testimonials', href: '/testimonials', showInFooter: true },
+    { label: 'Careers', href: '/careers', showInNavbar: false, showInFooter: true },
   ],
   contactCta: {
     text: 'Contact Us',

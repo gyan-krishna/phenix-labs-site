@@ -36,6 +36,9 @@ export function ScrollResetLink({
     const isExternal =
       typeof href === 'string' && /^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(href)
     const hasHash = typeof href === 'string' ? href.includes('#') : Boolean(href.hash)
+    const destinationHash = typeof href === 'string'
+      ? new URL(href, window.location.href).hash
+      : href.hash || ''
     const destinationPath =
       typeof href === 'string'
         ? new URL(href, window.location.href).pathname
@@ -46,16 +49,31 @@ export function ScrollResetLink({
       event.defaultPrevented ||
       isModifiedClick ||
       target === '_blank' ||
-      isExternal ||
-      hasHash
+      isExternal
     ) {
+      return
+    }
+
+    if (hasHash && isSameRoute) {
+      const targetId = decodeURIComponent(destinationHash.slice(1))
+      const target = targetId ? document.getElementById(targetId) : null
+      if (!target) return
+
+      event.preventDefault()
+      window.history.pushState(null, '', destinationHash)
+      target.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          ? 'auto'
+          : 'smooth',
+        block: 'start',
+      })
       return
     }
 
     window.scrollTo({
       top: 0,
       left: 0,
-      behavior: isSameRoute ? 'smooth' : 'auto',
+      behavior: isSameRoute && !window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'smooth' : 'auto',
     })
   }
 
