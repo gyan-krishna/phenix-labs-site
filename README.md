@@ -142,6 +142,12 @@ Keep the form name and field names synchronized across:
 
 Netlify Forms and the edge protection only run when this application is deployed through Netlify. Local development can exercise validation and UI behavior, but it does not store a real Netlify submission.
 
+## Careers
+
+Jobs are authored as `Job Postings` in Sanity and use an immutable public ID such as `PLJ-7F3K2Q`. Published roles with status **Open** appear at `/careers`; each has a stable `/careers/<job-id>` URL. Draft jobs are not public, and closed or expired jobs remain readable without an application action.
+
+`Careers Settings` contains the global application switch and optional Careers intro. Each job also has its own application switch and an HTTPS **Apply Link**, typically the role’s Google Forms URL. When both switches are enabled and the job is inside its application window, Apply now opens that link in a new tab. No applicant information is collected, stored, or processed by this website.
+
 ## SEO
 
 SEO is centralized in `lib/seo.ts` and includes route metadata, canonical URLs, Open Graph/Twitter data, JSON-LD, a generated Open Graph image, icons, `robots.txt`, and `sitemap.xml`. Set `NEXT_PUBLIC_BASE_URL` to the canonical production origin. `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` is optional and should contain only the verification token issued by Google Search Console.

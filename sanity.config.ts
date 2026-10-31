@@ -2,12 +2,12 @@
 
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
-import { ContactRound, FileText } from 'lucide-react'
+import { BriefcaseBusiness, ContactRound, FileText } from 'lucide-react'
 import { dataset, projectId, studioUrl } from './sanity/env'
 import { schemaTypes } from './sanity/schemaTypes'
 import { RecreateSingletonAction } from './sanity/actions/RecreateSingletonAction'
 
-const singletonTypes = new Set(['aboutPage', 'contactSettings'])
+const singletonTypes = new Set(['aboutPage', 'contactSettings', 'careerSettings'])
 const singletonActions = new Set(['publish', 'discardChanges', 'restore'])
 
 /** Studio configuration, navigation structure, schemas, and singleton safeguards. */
@@ -45,13 +45,24 @@ export default defineConfig({
                   .schemaType('contactSettings')
                   .documentId('contactSettings'),
               ),
+            structure
+              .listItem()
+              .title('Careers Settings')
+              .icon(BriefcaseBusiness)
+              .child(
+                structure
+                  .document()
+                  .schemaType('careerSettings')
+                  .documentId('careerSettings'),
+              ),
             structure.divider(),
             ...structure
               .documentTypeListItems()
               .filter(
                 (item) =>
                   item.getId() !== 'aboutPage' &&
-                  item.getId() !== 'contactSettings',
+                  item.getId() !== 'contactSettings' &&
+                  item.getId() !== 'careerSettings',
               ),
           ]),
     }),
@@ -75,7 +86,8 @@ export default defineConfig({
       previousOptions.filter(
         (option) =>
           option.templateId !== 'aboutPage' &&
-          option.templateId !== 'contactSettings',
+          option.templateId !== 'contactSettings' &&
+          option.templateId !== 'careerSettings',
       ),
   },
 })

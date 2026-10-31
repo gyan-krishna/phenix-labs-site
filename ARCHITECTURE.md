@@ -132,7 +132,7 @@ Both APIs return cacheable JSON with `s-maxage=60` and `stale-while-revalidate=3
 
 ### Singleton documents
 
-`aboutPage` and `contactSettings` use canonical document IDs. The Studio:
+`aboutPage`, `contactSettings`, and `careerSettings` use canonical document IDs. The Studio:
 
 - pins each singleton in the content structure;
 - removes it from the global new-document menu;
@@ -196,6 +196,12 @@ The archive loads every published testimonial, including Home-inactive records, 
 ### Contact
 
 The page consumes the `contactSettings` singleton for contact and social information. The form is a client island within the server-rendered route.
+
+### Careers
+
+`jobPosting` is a Sanity collection containing public role content only. Each role receives one immutable `jobId`; its public URL is `/careers/<jobId>`. Open roles must be inside their optional opening/deadline window before they appear in the collection. Draft roles are not public, while closed roles render an unindexed reference page without an application action.
+
+`careerSettings` supplies the global application switch and Careers intro. Each `jobPosting` owns its own application switch and HTTPS Apply Link, normally a Google Forms URL. `lib/data/jobs.ts` normalizes public job queries and accepts an external application link only when it is HTTPS. Both the listing and job-detail page open valid active links in a new tab; the global pause, individual pause, status, and deadline remove that action.
 
 ## 7. Shared layout and navigation
 

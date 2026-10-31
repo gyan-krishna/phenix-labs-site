@@ -6,7 +6,9 @@ import { courseType } from './courses'
 import { faqsType } from './faqs'
 import { internalCertificateType } from './internalCertificates'
 import { inventionType } from './inventions'
+import { jobPostingType } from './jobPosting'
 import { productsType } from './products'
+import { careerSettingsType } from './careerSettings'
 import { serviceType } from './services'
 import { studentProjectsType } from './studentProjects'
 import { studentReviewType } from './studentReviews'
@@ -16,6 +18,7 @@ import { testimonialType } from './testimonials'
 export const schemaTypes = [
   aboutPageType,
   contactSettingsType,
+  careerSettingsType,
   faqsType,
   courseType,
   studentReviewType,
@@ -24,6 +27,7 @@ export const schemaTypes = [
   internalCertificateType,
   clientType,
   inventionType,
+  jobPostingType,
   productsType,
   serviceType,
   testimonialType,
