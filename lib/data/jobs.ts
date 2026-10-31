@@ -19,10 +19,8 @@ export interface JobPosting {
   preferredSkills: string[]
   benefits: string[]
   compensation: string
-  resumeRequired: boolean
-  coverLetterRequired: boolean
   applicationsEnabled: boolean
-  retentionDays: number | null
+  applyLink: string
   status: JobStatus
   opensAt: string | null
   applicationDeadline: string | null
@@ -45,10 +43,8 @@ const jobProjection = `{
   "preferredSkills": coalesce(preferredSkills, []),
   "benefits": coalesce(benefits, []),
   "compensation": coalesce(compensation, ""),
-  "resumeRequired": coalesce(resumeRequired, false),
-  "coverLetterRequired": coalesce(coverLetterRequired, false),
   "applicationsEnabled": coalesce(applicationsEnabled, true),
-  retentionDays,
+  "applyLink": coalesce(applyLink, ""),
   status,
   opensAt,
   applicationDeadline
@@ -74,23 +70,26 @@ const jobByIdQuery = `*[
 
 const careerSettingsQuery = `*[_type == "careerSettings" && _id == "careerSettings"][0]{
   "applicationsEnabled": coalesce(applicationsEnabled, true),
-  "retentionDays": coalesce(retentionDays, 180),
-  "privacyContactEmail": coalesce(privacyContactEmail, ""),
   "pageIntro": coalesce(pageIntro, "")
 }`
 
 export interface CareerSettings {
   applicationsEnabled: boolean
-  retentionDays: number
-  privacyContactEmail: string
   pageIntro: string
 }
 
 export const DEFAULT_CAREER_SETTINGS: CareerSettings = {
   applicationsEnabled: true,
-  retentionDays: 180,
-  privacyContactEmail: 'gyankrishna@phenixlabs.in',
   pageIntro: '',
+}
+
+function normaliseApplyLink(value: string) {
+  try {
+    const url = new URL(value)
+    return url.protocol === 'https:' ? url.toString() : ''
+  } catch {
+    return ''
+  }
 }
 
 function normaliseJob(job: JobPosting | null): JobPosting | null {
@@ -101,10 +100,8 @@ function normaliseJob(job: JobPosting | null): JobPosting | null {
     requiredSkills: Array.isArray(job.requiredSkills) ? job.requiredSkills.filter(Boolean) : [],
     preferredSkills: Array.isArray(job.preferredSkills) ? job.preferredSkills.filter(Boolean) : [],
     benefits: Array.isArray(job.benefits) ? job.benefits.filter(Boolean) : [],
-    retentionDays: typeof job.retentionDays === 'number'
-      ? Math.min(730, Math.max(30, job.retentionDays))
-      : null,
     applicationsEnabled: job.applicationsEnabled !== false,
+    applyLink: normaliseApplyLink(job.applyLink),
   }
 }
 
@@ -136,21 +133,11 @@ export async function getCareerSettings(): Promise<CareerSettings> {
     const settings = await sanityClient.fetch<Partial<CareerSettings> | null>(careerSettingsQuery, {}, { next: { revalidate: 60 } })
     return {
       applicationsEnabled: settings?.applicationsEnabled ?? DEFAULT_CAREER_SETTINGS.applicationsEnabled,
-      retentionDays: Math.min(730, Math.max(30, settings?.retentionDays ?? DEFAULT_CAREER_SETTINGS.retentionDays)),
-      privacyContactEmail: settings?.privacyContactEmail || DEFAULT_CAREER_SETTINGS.privacyContactEmail,
       pageIntro: settings?.pageIntro || '',
     }
   } catch (error) {
     console.warn('[Sanity] Could not load Careers Settings.', error)
     return { ...DEFAULT_CAREER_SETTINGS, applicationsEnabled: false }
-  }
-}
-
-/** Applies per-role settings only when an editor intentionally provides an override. */
-export function getJobApplicationPolicy(job: JobPosting, settings: CareerSettings) {
-  return {
-    retentionDays: job.retentionDays ?? settings.retentionDays,
-    privacyContactEmail: settings.privacyContactEmail,
   }
 }
 
@@ -166,5 +153,5 @@ export function isJobApplicationWindowOpen(job: JobPosting, now = new Date()) {
 
 /** Shared guard for public route rendering; the Edge function repeats this authoritatively. */
 export function isAcceptingApplications(job: JobPosting, settings: CareerSettings, now = new Date()) {
-  return settings.applicationsEnabled && job.applicationsEnabled && isJobApplicationWindowOpen(job, now)
+  return settings.applicationsEnabled && job.applicationsEnabled && Boolean(job.applyLink) && isJobApplicationWindowOpen(job, now)
 }

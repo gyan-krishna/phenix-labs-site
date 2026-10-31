@@ -19,11 +19,6 @@ Browser request ──▶ Next.js App Router ──▶ lib/data normalization
                           └── client islands for interaction
 
 Contact form ──POST /__forms.html──▶ Netlify Edge guard ──▶ Netlify Forms
-
-Job application ──POST /__job-application.html──▶ Netlify Edge guard ──▶ Netlify Forms
-                                                          │
-                                                          ├──▶ Netlify Blobs (HMAC duplicate marker)
-                                                          └──▶ verified event → Resend receipt
 ```
 
 The important boundary is `lib/data/`: presentation components receive application-shaped data and do not contain GROQ queries or depend on Sanity document shapes.
@@ -204,13 +199,9 @@ The page consumes the `contactSettings` singleton for contact and social informa
 
 ### Careers
 
-`jobPosting` is a Sanity collection containing public role content only. Each role receives one immutable `jobId`; its public URL is `/careers/<jobId>`. Open roles must be inside their optional opening/deadline window before they appear in the collection or accept applications. Draft roles are not public, while closed roles render an unindexed reference page with no form.
+`jobPosting` is a Sanity collection containing public role content only. Each role receives one immutable `jobId`; its public URL is `/careers/<jobId>`. Open roles must be inside their optional opening/deadline window before they appear in the collection. Draft roles are not public, while closed roles render an unindexed reference page without an application action.
 
-`careerSettings` supplies the global application switch, Careers intro, default retention duration, and applicant privacy contact email. Each `jobPosting` owns application availability through status and dates plus resume/cover-letter rules. A job can optionally override the global retention duration; the job-level value takes priority. `lib/data/jobs.ts` normalizes all public job queries so route components never depend on Sanity shapes.
-
-Applications never become Sanity documents. The browser posts multipart form data to the `job-application` Netlify form. Its Edge guard validates the role against an uncached public Sanity query, checks required fields and PDF constraints, rejects known disposable-email domains, applies Netlify rate limiting, and uses strong-consistency atomic Blob writes to reserve separate HMAC(email + job ID) and HMAC(normalized phone + job ID) duplicate keys. No raw applicant values are written to Blobs.
-
-After Netlify verifies the application, an event-triggered function sends a Resend receipt using provider idempotency and a permanent sent marker. A daily scheduled function deletes application form submissions using the retention duration captured at submission time. Verified and spam scans use saved pagination cursors and a runtime budget; deletion failures are observable and retry the current page. Duplicate hashes intentionally remain for the job ID lifetime. A site-wide POST guard blocks careers forms at alternate paths; the canonical endpoint applies live validation and its own rate limit. PDF contents are checked independently of filenames, and separate email/phone hash markers block duplicates without applicant accounts.
+`careerSettings` supplies the global application switch and Careers intro. Each `jobPosting` owns its own application switch and HTTPS Apply Link, normally a Google Forms URL. `lib/data/jobs.ts` normalizes public job queries and accepts an external application link only when it is HTTPS. Both the listing and job-detail page open valid active links in a new tab; the global pause, individual pause, status, and deadline remove that action.
 
 ## 7. Shared layout and navigation
 

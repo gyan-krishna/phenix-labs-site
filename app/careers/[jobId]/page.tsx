@@ -1,14 +1,12 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowLeft, CalendarDays, Check, FileText, MapPin, PauseCircle, Send } from 'lucide-react'
+import { ArrowLeft, ArrowUpRight, CalendarDays, Check, MapPin, PauseCircle, Send } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { JsonLd } from '@/components/common/JsonLd'
 import { MarkdownContent } from '@/components/content/MarkdownContent'
-import { JobApplicationForm } from '@/components/forms/JobApplicationForm'
 import { MainLayout } from '@/components/layout/MainLayout'
-import { ScrollResetLink } from '@/components/navigation/ScrollResetLink'
 import { careersContent } from '@/content/careers'
-import { getCareerSettings, getJobApplicationPolicy, getJobById, isAcceptingApplications, isJobApplicationWindowOpen } from '@/lib/data/jobs'
+import { getCareerSettings, getJobById, isAcceptingApplications, isJobApplicationWindowOpen } from '@/lib/data/jobs'
 import { getFooterData, getNavbarData } from '@/lib/config/site'
 import { generateMetadata as makeMetadata, getBreadcrumbSchema, getJobPostingSchema, getWebPageSchema } from '@/lib/seo'
 import { sharedContent } from '@/content/shared'
@@ -39,7 +37,6 @@ export default async function JobDetailPage({ params }: { params: Promise<{ jobI
 
   const acceptingApplications = isAcceptingApplications(job, settings)
   const jobApplicationWindowOpen = isJobApplicationWindowOpen(job)
-  const applicationPolicy = getJobApplicationPolicy(job, settings)
   const closed = !acceptingApplications
   // A role's own closed/deadline state is more specific than the global pause.
   const showGlobalPause = jobApplicationWindowOpen && !settings.applicationsEnabled
@@ -97,14 +94,14 @@ export default async function JobDetailPage({ params }: { params: Promise<{ jobI
               {job.benefits.length > 0 && <RoleList title={careersContent.detail.benefitsTitle} items={job.benefits} />}
             </article>
             <aside className="space-y-5 lg:sticky lg:top-24 lg:self-start">
-              <div className="rounded-[20px] bg-[#0b1523] p-6 text-white shadow-[0_20px_55px_rgba(22,34,54,.15)]"><Send aria-hidden="true" size={22} className="text-[#67aeff]" /><p className="mt-5 text-xs font-bold uppercase tracking-[0.18em] text-[#67aeff]">{acceptingApplications ? careersContent.detail.applicationTitle : unavailableTitle}</p><p className="mt-3 text-sm leading-7 text-[#aebccc]">{acceptingApplications ? careersContent.detail.applicationDescription : unavailableDescription}</p>{acceptingApplications && <ScrollResetLink href="#application" className="mt-6 inline-flex h-11 w-full items-center justify-center rounded-full bg-[#0064d7] px-5 text-sm font-semibold text-white transition hover:bg-[#0055b8]">Apply now</ScrollResetLink>}</div>
+              <div className="rounded-[20px] bg-[#0b1523] p-6 text-white shadow-[0_20px_55px_rgba(22,34,54,.15)]"><Send aria-hidden="true" size={22} className="text-[#67aeff]" /><p className="mt-5 text-xs font-bold uppercase tracking-[0.18em] text-[#67aeff]">{acceptingApplications ? careersContent.detail.applicationTitle : unavailableTitle}</p><p className="mt-3 text-sm leading-7 text-[#aebccc]">{acceptingApplications ? careersContent.detail.applicationDescription : unavailableDescription}</p>{acceptingApplications && <a href={job.applyLink} target="_blank" rel="noreferrer" className="mt-6 inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-[#0064d7] px-5 text-sm font-semibold text-white transition hover:bg-[#0055b8]">Apply now <ArrowUpRight aria-hidden="true" size={16} /></a>}</div>
             </aside>
           </div>
         </section>
 
         <section id="application" data-section-label="Application" className="scroll-mt-24 px-5 pb-24 md:pb-30">
           <div className="mx-auto max-w-[920px] rounded-[20px] border border-[#c8d6e0] bg-white p-6 shadow-[0_24px_65px_rgba(22,34,54,.09)] sm:p-9 md:p-11">
-            {closed ? <div className="text-center"><span className="mx-auto flex size-13 items-center justify-center rounded-[16px] bg-[#eef3f6] text-[#526a80]"><PauseCircle aria-hidden="true" size={24} /></span><h2 className="mt-6 text-[28px] font-bold tracking-[-0.04em] text-[#162236]">{unavailableTitle}</h2><p className="mx-auto mt-3 max-w-[560px] text-[15px] leading-7 text-[#607183]">{unavailableDescription}</p></div> : <><div className="mb-8 border-b border-[#d8e1e8] pb-7"><div className="flex size-10 items-center justify-center rounded-[13px] bg-[#e7f2ff] text-[#0064d7]"><FileText aria-hidden="true" size={19} /></div><h2 className="mt-5 text-[30px] font-bold tracking-[-0.035em] text-[#162236] md:text-[40px]">{careersContent.detail.applicationTitle}</h2><p className="mt-3 text-sm leading-7 text-[#607183]">{careersContent.detail.applicationDescription}</p></div><JobApplicationForm jobId={job.jobId} jobTitle={job.title} resumeRequired={job.resumeRequired} coverLetterRequired={job.coverLetterRequired} retentionDays={applicationPolicy.retentionDays} privacyContactEmail={applicationPolicy.privacyContactEmail} /></>}
+            {closed ? <div className="text-center"><span className="mx-auto flex size-13 items-center justify-center rounded-[16px] bg-[#eef3f6] text-[#526a80]"><PauseCircle aria-hidden="true" size={24} /></span><h2 className="mt-6 text-[28px] font-bold tracking-[-0.04em] text-[#162236]">{unavailableTitle}</h2><p className="mx-auto mt-3 max-w-[560px] text-[15px] leading-7 text-[#607183]">{unavailableDescription}</p></div> : <div className="text-center"><span className="mx-auto flex size-13 items-center justify-center rounded-[16px] bg-[#e7f2ff] text-[#0064d7]"><Send aria-hidden="true" size={24} /></span><h2 className="mt-6 text-[28px] font-bold tracking-[-0.04em] text-[#162236]">{careersContent.detail.applicationTitle}</h2><p className="mx-auto mt-3 max-w-[560px] text-[15px] leading-7 text-[#607183]">{careersContent.detail.applicationDescription}</p><a href={job.applyLink} target="_blank" rel="noreferrer" className="mt-7 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#0064d7] px-6 text-sm font-semibold text-white shadow-[0_10px_26px_rgba(0,100,215,.2)] transition hover:bg-[#0055b8]">{careersContent.detail.continueApplication}<ArrowUpRight aria-hidden="true" size={17} /></a></div>}
           </div>
         </section>
       </div>

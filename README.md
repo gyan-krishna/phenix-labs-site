@@ -142,33 +142,11 @@ Keep the form name and field names synchronized across:
 
 Netlify Forms and the edge protection only run when this application is deployed through Netlify. Local development can exercise validation and UI behavior, but it does not store a real Netlify submission.
 
-## Careers and job applications
+## Careers
 
-Jobs are authored as `Job Postings` in Sanity and use an immutable public ID such as `PLJ-7F3K2Q`. Published roles with status **Open** appear at `/careers`; each has a stable `/careers/<job-id>` URL. Draft jobs are not public, and closed or expired jobs remain readable but do not accept submissions.
+Jobs are authored as `Job Postings` in Sanity and use an immutable public ID such as `PLJ-7F3K2Q`. Published roles with status **Open** appear at `/careers`; each has a stable `/careers/<job-id>` URL. Draft jobs are not public, and closed or expired jobs remain readable without an application action.
 
-`Careers Settings` is a required singleton for global application availability, Careers intro, applicant privacy contact address, and default retention period. Each `Job Posting` owns its status, dates, and document requirements; it can optionally override the global retention period for that role. Applicant records are intentionally not stored in Sanity.
-
-Applications use a separate Netlify Form named `job-application`, discovered from `public/__job-application.html`. Keep its fields synchronized with:
-
-- `components/forms/JobApplicationForm.tsx`
-- `netlify/edge-functions/protect-job-application.ts`
-- `public/__job-application.html`
-
-The Edge guard validates the live Sanity job status, deadline, title and per-role document requirements, rejects known disposable email domains, enforces a honeypot and independent request limit, and stores only HMAC-based duplicate markers in strongly consistent Netlify Blobs. Either a matching normalized email or phone prevents another application for that job ID. Existing legacy email-and-phone markers are still recognized for the original combination. No raw email, phone number, or resume is written to Blobs. `block-job-application-bypass.ts` rejects careers form submissions at every other URL, including URL-encoded submissions, while allowing other forms through.
-
-PDF framing is checked from file contents in both the browser and Edge guard; filename and declared MIME type are not trusted. The browser supplies a generated PDF filename for storage. This is format validation, not malware scanning. Recruiters should use a maintained PDF viewer. The same application ID is retained during browser retries; an already accepted retry returns success without another submission. Ambiguous downstream failures preserve the duplicate reservation and ask the applicant to contact the team rather than risk a second submission. Administrators can inspect/delete the relevant hash markers in `career-application-dedupe` after checking Forms. Keep `APPLICATION_DEDUP_SECRET` stable.
-
-After a verified submission, `netlify/functions/application-receipt.ts` sends a confirmation through Resend with a stable provider idempotency key and a permanent sent marker. Email errors are logged and surfaced for event retry without removing the application. `netlify/functions/cleanup-job-applications.ts` runs daily and removes expired verified and spam submissions through the Netlify API using the retention period captured with each accepted application. Pagination cursors in `career-application-cleanup` allow large scans to resume across runs within the scheduled runtime budget. Failed deletions fail the run and retry the same page. Set `APPLICATION_CLEANUP_DRY_RUN=true` to inspect eligibility without deletion or cursor changes. Duplicate hashes remain for the lifetime of a job ID.
-
-Before production deployment:
-
-1. Enable Netlify form detection and deploy so `job-application` appears under **Forms**.
-2. Add a Netlify submission notification for the `job-application` form so recruiters receive new applications.
-3. Configure the server-only environment values in `.env.example`, including a long random `APPLICATION_DEDUP_SECRET`, limited-scope `NETLIFY_ACCESS_TOKEN`, and Netlify Project ID.
-4. Verify the Resend sender domain and set `RESEND_FROM_EMAIL`; configure `CAREERS_REPLY_TO_EMAIL` for recruiter replies.
-5. Test a real preview submission, retries, duplicates with either contact changed, a disposable address, an arbitrary PDF filename, an optional/required resume role, the receipt email, alternate-path submission rejection, and cleanup with **Run now** and dry-run enabled. Then disable dry-run for production. Configure Sanity and the dedup secret for the Functions runtime scope (which also serves Edge Functions), and the receipt/cleanup values for Functions. These checks require Netlify; `next build` alone cannot verify Forms or platform rate limits.
-
-The Careers application flow is Netlify-specific. A non-Netlify deployment needs a replacement submission adapter before accepting applications.
+`Careers Settings` contains the global application switch and optional Careers intro. Each job also has its own application switch and an HTTPS **Apply Link**, typically the role’s Google Forms URL. When both switches are enabled and the job is inside its application window, Apply now opens that link in a new tab. No applicant information is collected, stored, or processed by this website.
 
 ## SEO
 

@@ -49,7 +49,7 @@ export const jobPostingType = defineType({
   groups: [
     { name: 'basics', title: 'Role basics', default: true },
     { name: 'details', title: 'Role details' },
-    { name: 'application', title: 'Application requirements' },
+    { name: 'application', title: 'Application link' },
     { name: 'publishing', title: 'Publishing' },
   ],
   fields: [
@@ -58,7 +58,7 @@ export const jobPostingType = defineType({
       title: 'Public Job ID',
       type: 'string',
       group: 'basics',
-      description: 'Generated once and used in the public URL and duplicate-application protection. Do not reuse it for a reposted role.',
+      description: 'Generated once and used in the public job URL. Do not reuse it for a reposted role.',
       initialValue: createJobId,
       readOnly: ({ document }) => Boolean(document?.jobId),
       validation: (rule) => rule.required().regex(/^PLJ-[A-Z0-9]{6}$/, { name: 'job ID' }).custom(validateUniqueJobId),
@@ -113,8 +113,6 @@ export const jobPostingType = defineType({
     defineField({ name: 'preferredSkills', title: 'Preferred Skills', type: 'array', group: 'details', of: [{ type: 'string' }], validation: (rule) => rule.unique().max(20) }),
     defineField({ name: 'benefits', title: 'Benefits', type: 'array', group: 'details', of: [{ type: 'string' }], validation: (rule) => rule.unique().max(20) }),
     defineField({ name: 'compensation', title: 'Compensation', type: 'string', group: 'details', description: 'Optional public range or statement.', validation: (rule) => rule.max(160) }),
-    defineField({ name: 'resumeRequired', title: 'Require PDF Resume', type: 'boolean', group: 'application', initialValue: false, validation: (rule) => rule.required() }),
-    defineField({ name: 'coverLetterRequired', title: 'Require Cover Letter', type: 'boolean', group: 'application', initialValue: false, validation: (rule) => rule.required() }),
     defineField({
       name: 'applicationsEnabled',
       title: 'Accept Applications for This Role',
@@ -125,12 +123,15 @@ export const jobPostingType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: 'retentionDays',
-      title: 'Application Retention Override (Days)',
-      type: 'number',
+      name: 'applyLink',
+      title: 'Apply Link',
+      type: 'url',
       group: 'application',
-      description: 'Optional. Leave blank to use the required global Careers Settings retention period.',
-      validation: (rule) => rule.integer().min(30).max(730),
+      description: 'The Google Forms or external application URL opened by the Apply now buttons.',
+      validation: (rule) => rule.uri({ scheme: ['https'] }).custom((value, context) => {
+        const isActive = context.document?.status === 'open' && context.document?.applicationsEnabled !== false
+        return !isActive || Boolean(value) || 'An Apply Link is required when this role is open and accepting applications.'
+      }),
     }),
     defineField({
       name: 'status',

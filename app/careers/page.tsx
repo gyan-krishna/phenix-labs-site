@@ -92,8 +92,8 @@ export default async function CareersPage() {
                       <p className="mt-6 text-[15px] leading-7 text-[#607183]">{job.summary}</p>
                       <div className="mt-7 flex flex-wrap gap-3 pt-1">
                         <Link href={`/careers/${job.jobId}`} className="inline-flex h-11 items-center justify-center rounded-full border border-[#7d8d9d] px-5 text-sm font-semibold text-[#26374a] transition hover:border-[#26374a] hover:bg-[#f3f7fa]">{careersContent.list.viewRole}</Link>
-                        {settings.applicationsEnabled && job.applicationsEnabled ? (
-                          <Link href={`/careers/${job.jobId}#application`} className="group/link inline-flex h-11 items-center justify-center gap-2 rounded-full border border-[#5aa7ed] bg-[#f5faff] px-5 text-sm font-semibold text-[#0064d7] transition hover:border-[#0064d7] hover:bg-[#e7f2ff]">{careersContent.list.applyNow}<ArrowUpRight aria-hidden="true" size={16} className="transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" /></Link>
+                        {settings.applicationsEnabled && job.applicationsEnabled && job.applyLink ? (
+                          <a href={job.applyLink} target="_blank" rel="noreferrer" className="group/link inline-flex h-11 items-center justify-center gap-2 rounded-full border border-[#5aa7ed] bg-[#f5faff] px-5 text-sm font-semibold text-[#0064d7] transition hover:border-[#0064d7] hover:bg-[#e7f2ff]">{careersContent.list.applyNow}<ArrowUpRight aria-hidden="true" size={16} className="transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" /></a>
                         ) : <span className="inline-flex h-11 items-center rounded-full border border-[#efd29e] bg-[#fff8e8] px-5 text-sm font-semibold text-[#8a5a10]">Applications paused</span>}
                       </div>
                     </div>
