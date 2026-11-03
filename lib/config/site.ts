@@ -19,7 +19,7 @@ export const navbarData: NavbarData = {
     { label: 'Services', href: '/services', showInFooter: true },
     { label: 'Products', href: '/products', showInFooter: true },
     { label: 'Testimonials', href: '/testimonials', showInFooter: true },
-    { label: 'Careers', href: '/careers', showInNavbar: false, showInFooter: true },
+    { label: 'Careers', href: '/careers', showInFooter: true },
   ],
   contactCta: {
     text: 'Contact Us',
