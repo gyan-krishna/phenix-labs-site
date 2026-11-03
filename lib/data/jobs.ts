@@ -1,4 +1,5 @@
-import { sanityClient } from '@/sanity/lib/client'
+import { cache } from 'react'
+import { sanityClient, sanityFreshClient } from '@/sanity/lib/client'
 
 export type JobStatus = 'draft' | 'open' | 'closed'
 
@@ -61,6 +62,15 @@ const openJobsQuery = `*[
   (!defined(applicationDeadline) || dateTime(applicationDeadline) >= dateTime(now()))
 ] | order(coalesce(opensAt, _createdAt) desc, title asc) ${jobProjection}`
 
+const sitemapJobsQuery = `*[
+  _type == "jobPosting" &&
+  !(_id in path("drafts.**")) &&
+  status == "open" &&
+  defined(jobId) &&
+  (!defined(opensAt) || dateTime(opensAt) <= dateTime(now())) &&
+  (!defined(applicationDeadline) || dateTime(applicationDeadline) >= dateTime(now()))
+] | order(coalesce(opensAt, _createdAt) desc){ jobId, opensAt }`
+
 const jobByIdQuery = `*[
   _type == "jobPosting" &&
   !(_id in path("drafts.**")) &&
@@ -105,32 +115,46 @@ function normaliseJob(job: JobPosting | null): JobPosting | null {
   }
 }
 
-/** Lists published roles that are open and within their configured application window. */
-export async function getOpenJobs(): Promise<JobPosting[]> {
+/**
+ * Lists published roles that are open and within their configured application window.
+ * React deduplicates calls made while rendering one request; `no-store` keeps the
+ * result fresh for the next request.
+ */
+export const getOpenJobs = cache(async (): Promise<JobPosting[]> => {
   try {
-    const jobs = await sanityClient.fetch<JobPosting[]>(openJobsQuery, {}, { next: { revalidate: 60 } })
+    const jobs = await sanityFreshClient.fetch<JobPosting[]>(openJobsQuery, {}, { cache: 'no-store' })
     return jobs.map(normaliseJob).filter((job): job is JobPosting => Boolean(job))
   } catch (error) {
     console.warn('[Sanity] Could not load open job postings.', error)
     return []
   }
+})
+
+/** Sitemap data is lightweight and may be up to one hour behind the public Careers page. */
+export async function getOpenJobsForSitemap(): Promise<Array<Pick<JobPosting, 'jobId' | 'opensAt'>>> {
+  try {
+    return await sanityClient.fetch<Array<Pick<JobPosting, 'jobId' | 'opensAt'>>>(sitemapJobsQuery, {}, { next: { revalidate: 3600 } })
+  } catch (error) {
+    console.warn('[Sanity] Could not load career sitemap entries.', error)
+    return []
+  }
 }
 
-/** Looks up a published role by its stable public job ID, including closed roles for reference. */
-export async function getJobById(jobId: string): Promise<JobPosting | null> {
+/** Looks up a published role once per render, including closed roles for reference. */
+export const getJobById = cache(async (jobId: string): Promise<JobPosting | null> => {
   try {
-    const job = await sanityClient.fetch<JobPosting | null>(jobByIdQuery, { jobId }, { next: { revalidate: 60 } })
+    const job = await sanityFreshClient.fetch<JobPosting | null>(jobByIdQuery, { jobId }, { cache: 'no-store' })
     return normaliseJob(job)
   } catch (error) {
     console.warn('[Sanity] Could not load job posting.', error)
     return null
   }
-}
+})
 
-/** Returns required global defaults used when a job does not provide its own override. */
-export async function getCareerSettings(): Promise<CareerSettings> {
+/** Returns the global Careers controls once per render, without cross-request caching. */
+export const getCareerSettings = cache(async (): Promise<CareerSettings> => {
   try {
-    const settings = await sanityClient.fetch<Partial<CareerSettings> | null>(careerSettingsQuery, {}, { next: { revalidate: 60 } })
+    const settings = await sanityFreshClient.fetch<Partial<CareerSettings> | null>(careerSettingsQuery, {}, { cache: 'no-store' })
     return {
       applicationsEnabled: settings?.applicationsEnabled ?? DEFAULT_CAREER_SETTINGS.applicationsEnabled,
       pageIntro: settings?.pageIntro || '',
@@ -139,7 +163,7 @@ export async function getCareerSettings(): Promise<CareerSettings> {
     console.warn('[Sanity] Could not load Careers Settings.', error)
     return { ...DEFAULT_CAREER_SETTINGS, applicationsEnabled: false }
   }
-}
+})
 
 /** Checks only the role's own status and dates, independent of the global pause. */
 export function isJobApplicationWindowOpen(job: JobPosting, now = new Date()) {

@@ -1,10 +1,12 @@
 import type { MetadataRoute } from 'next'
 import { absoluteUrl } from '@/lib/seo'
-import { getOpenJobs } from '@/lib/data/jobs'
+import { getOpenJobsForSitemap } from '@/lib/data/jobs'
+
+export const revalidate = 3600
 
 /** Canonical public routes exposed to search engines. Admin and API routes are excluded. */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const jobs = await getOpenJobs()
+  const jobs = await getOpenJobsForSitemap()
   const routes: MetadataRoute.Sitemap = [
     {
       url: absoluteUrl('/'),

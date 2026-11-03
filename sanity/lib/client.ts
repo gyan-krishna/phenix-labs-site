@@ -11,3 +11,17 @@ export const sanityClient = createClient({
     studioUrl,
   },
 })
+
+/**
+ * Careers availability must reflect an editor's pause, deadline, or status change
+ * on the very next request, rather than waiting for the CDN or route cache.
+ */
+export const sanityFreshClient = createClient({
+  projectId,
+  dataset,
+  apiVersion,
+  useCdn: false,
+  stega: {
+    studioUrl,
+  },
+})

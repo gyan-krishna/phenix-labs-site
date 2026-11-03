@@ -10,6 +10,8 @@ import { generateMetadata, getBreadcrumbSchema, getWebPageSchema } from '@/lib/s
 import { sharedContent } from '@/content/shared'
 
 export const metadata: Metadata = generateMetadata({ ...careersContent.metadata })
+// Job availability is intentionally live: a pause or deadline must take effect on the next request.
+export const dynamic = 'force-dynamic'
 
 /** Server-rendered open-role collection backed by published Sanity job postings. */
 export default async function CareersPage() {
